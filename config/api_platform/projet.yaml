@@ -1,0 +1,20 @@
+resources:
+    App\Entity\Projet:
+        shortName: Project
+        description: A project run for a client company.
+        normalizationContext:
+            groups: ['project:read']
+        denormalizationContext:
+            groups: ['project:write']
+        operations:
+            ApiPlatform\Metadata\GetCollection:
+                security: "is_granted('ROLE_USER')"
+                filters: ['project.search_filter', 'project.order_filter', 'project.date_filter']
+            ApiPlatform\Metadata\Get:
+                security: "is_granted('ROLE_USER') and is_granted('COMPANY_ACCESS', object)"
+            ApiPlatform\Metadata\Post:
+                security: "is_granted('ROLE_ADMIN')"
+            ApiPlatform\Metadata\Patch:
+                security: "is_granted('ROLE_ADMIN') and is_granted('COMPANY_ACCESS', object)"
+            ApiPlatform\Metadata\Delete:
+                security: "is_granted('ROLE_ADMIN')"

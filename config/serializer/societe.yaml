@@ -1,0 +1,24 @@
+App\Entity\Societe:
+    attributes:
+        id:
+            groups: ['company:read', 'project:read']
+        denomination:
+            groups: ['company:read', 'company:write', 'project:read']
+        statut:
+            groups: ['company:read', 'company:write']
+        adresse:
+            groups: ['company:read', 'company:write']
+        email:
+            groups: ['company:read', 'company:write']
+        phone:
+            groups: ['company:read', 'company:write']
+        ice:
+            groups: ['company:read', 'company:write']
+        description:
+            groups: ['company:read', 'company:write']
+        projets:
+            groups: ['company:read']
+        createdAt:
+            groups: ['company:read']
+        updatedAt:
+            groups: ['company:read']

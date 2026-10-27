@@ -1,0 +1,33 @@
+App\Entity\Projet:
+    attributes:
+        id:
+            groups: ['project:read']
+        nom:
+            groups: ['project:read', 'project:write']
+        type:
+            groups: ['project:read', 'project:write']
+        description:
+            groups: ['project:read', 'project:write']
+        status:
+            groups: ['project:read', 'project:write']
+        priorite:
+            groups: ['project:read', 'project:write']
+        url:
+            groups: ['project:read', 'project:write']
+        dateCommande:
+            groups: ['project:read', 'project:write']
+        dateLivraison:
+            groups: ['project:read', 'project:write']
+        projetTeste:
+            groups: ['project:read', 'project:write']
+        projetValide:
+            groups: ['project:read', 'project:write']
+        societe:
+            groups: ['project:read', 'project:write']
+        sslExpiresAt:
+            groups: ['project:read']
+        created:
+            groups: ['project:read']
+        updated:
+            groups: ['project:read']
+        # Deliberately not exposed: access to the source code and to the environment

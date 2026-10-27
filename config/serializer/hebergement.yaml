@@ -1,0 +1,27 @@
+App\Entity\Hebergement:
+    attributes:
+        id:
+            groups: ['hosting:read']
+        fournisseur:
+            groups: ['hosting:read', 'hosting:write']
+        type:
+            groups: ['hosting:read', 'hosting:write']
+        site:
+            groups: ['hosting:read', 'hosting:write']
+        url:
+            groups: ['hosting:read', 'hosting:write']
+        dateExpiration:
+            groups: ['hosting:read', 'hosting:write']
+        estActif:
+            groups: ['hosting:read', 'hosting:write']
+        prix:
+            groups: ['hosting:read', 'hosting:write']
+        periodicite:
+            groups: ['hosting:read', 'hosting:write']
+        coutAnnuel:
+            groups: ['hosting:read']
+        created:
+            groups: ['hosting:read']
+        updated:
+            groups: ['hosting:read']
+        # Deliberately not exposed: "acces" (credentials of the hosting)

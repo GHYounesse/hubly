@@ -1,0 +1,16 @@
+resources:
+    App\Entity\Societe:
+        shortName: Company
+        description: A client company. Creating a company stays in the web app (it needs a logo upload).
+        normalizationContext:
+            groups: ['company:read']
+        denormalizationContext:
+            groups: ['company:write']
+        operations:
+            ApiPlatform\Metadata\GetCollection:
+                security: "is_granted('ROLE_USER')"
+                filters: ['company.search_filter', 'company.order_filter']
+            ApiPlatform\Metadata\Get:
+                security: "is_granted('ROLE_USER') and is_granted('COMPANY_ACCESS', object)"
+            ApiPlatform\Metadata\Patch:
+                security: "is_granted('ROLE_ADMIN') and is_granted('COMPANY_ACCESS', object)"

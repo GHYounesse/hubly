@@ -1,0 +1,18 @@
+resources:
+    App\Entity\Hebergement:
+        shortName: Hosting
+        description: A hosting plan. Access credentials are never exposed by the API.
+        normalizationContext:
+            groups: ['hosting:read']
+        denormalizationContext:
+            groups: ['hosting:write']
+        operations:
+            ApiPlatform\Metadata\GetCollection:
+                security: "is_granted('ROLE_USER')"
+                filters: ['hosting.search_filter', 'hosting.order_filter', 'hosting.date_filter', 'hosting.boolean_filter']
+            ApiPlatform\Metadata\Get:
+                security: "is_granted('ROLE_USER')"
+            ApiPlatform\Metadata\Post:
+                security: "is_granted('ROLE_ADMIN')"
+            ApiPlatform\Metadata\Patch:
+                security: "is_granted('ROLE_ADMIN')"

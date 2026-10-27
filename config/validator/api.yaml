@@ -1,0 +1,17 @@
+# Rules enforced on API writes (the web forms already require these fields)
+App\Entity\Projet:
+    properties:
+        nom:
+            - NotBlank: ~
+        societe:
+            - NotNull: ~
+
+App\Entity\Societe:
+    properties:
+        denomination:
+            - NotBlank: ~
+
+App\Entity\Hebergement:
+    properties:
+        site:
+            - NotBlank: ~
