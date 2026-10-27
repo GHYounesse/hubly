@@ -50,7 +50,7 @@ jobs:
       JWT_PASSPHRASE: ci-only
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
@@ -113,7 +113,7 @@ jobs:
     name: Tailwind build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-node@v4
         with:
