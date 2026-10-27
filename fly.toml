@@ -1,0 +1,31 @@
+# Fly.io configuration. See docs/DEPLOY.md.
+app = "hubly-demo"            # change it: the name must be unique on Fly.io
+primary_region = "cdg"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  APP_ENV = "prod"
+  MESSENGER_TRANSPORT_DSN = "sync://"
+  MAILER_DSN = "null://null"
+  LOAD_DEMO_DATA = "1"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [[http_service.checks]]
+    method = "GET"
+    path = "/health"
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "40s"
+
+[[vm]]
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1

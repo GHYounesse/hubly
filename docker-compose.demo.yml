@@ -1,0 +1,55 @@
+# One-command demo: the app, PostgreSQL and demo data.
+#
+#   docker compose -f docker-compose.demo.yml up --build
+#
+# Then open http://localhost:8000 and sign in with admin@hubly.test / Demo1234!
+# The 2FA code is written to var/log/dev.log inside the container:
+#   docker compose -f docker-compose.demo.yml exec app tail -n 20 var/log/dev.log
+
+services:
+  database:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: hubly
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+    volumes:
+      - demo_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "app", "-d", "hubly"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    depends_on:
+      database:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    environment: &app-env
+      APP_ENV: dev
+      APP_SECRET: demo-only-secret-change-me
+      APP_ENCRYPTION_KEY: ZGVtby1vbmx5LWVuY3J5cHRpb24ta2V5LTMyYnl0ZSE=
+      DATABASE_URL: postgresql://app:app@database:5432/hubly?serverVersion=16&charset=utf8
+      MESSENGER_TRANSPORT_DSN: sync://
+      MAILER_DSN: "null://null"
+      MAIL_FROM: no-reply@hubly.test
+      ALERT_RECIPIENT: admin@hubly.test
+      JWT_SECRET_KEY: /app/config/jwt/private.pem
+      JWT_PUBLIC_KEY: /app/config/jwt/public.pem
+      JWT_PASSPHRASE: demo-only-passphrase
+      LOAD_DEMO_DATA: "1"
+
+  # Runs the scheduled work: URL checks every 15 minutes, SSL and hosting checks, the daily digest
+  worker:
+    build: .
+    depends_on:
+      app:
+        condition: service_started
+    environment: *app-env
+    entrypoint: ["sh", "-c", "sleep 20 && exec php bin/console messenger:consume scheduler_default -vv"]
+
+volumes:
+  demo_db:
