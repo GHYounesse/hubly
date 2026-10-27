@@ -1,0 +1,61 @@
+{% extends 'layout/admin.html.twig' %}
+
+{% block title %}Planning - {{ appName }}{% endblock %}
+
+{% block body %}
+<div class="content-wrapper">
+    {% include 'layout/_page_header.html.twig' with {
+        title: 'Planning',
+        subtitle: 'De la commande à la livraison, tous les projets sur une même ligne de temps.',
+        secondary: [{ label: 'Voir la liste', href: path('app_projets_index_main') }]
+    } %}
+
+    {% if timeline.rows is empty %}
+        <div class="panel">
+            <div class="empty-state">
+                <strong>Aucun projet à afficher</strong>
+                Renseignez une date de livraison sur vos projets pour les voir apparaître ici.
+            </div>
+        </div>
+    {% else %}
+        <div class="panel timeline-scroll">
+            <div class="timeline" role="table" aria-label="Planning des projets">
+                <div class="timeline__row timeline__row--head" role="row">
+                    <div class="timeline__label" role="columnheader">Projet</div>
+                    <div class="timeline__track" role="columnheader">
+                        {% for month in timeline.months %}
+                            <span class="timeline__month" style="left: {{ month.left }}%">{{ month.label }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {% for row in timeline.rows %}
+                    {% set statusClass = row.projet.status == 'terminé' ? 'is-done' : (row.projet.status == 'en cours' ? 'is-doing' : 'is-todo') %}
+                    <div class="timeline__row" role="row">
+                        <div class="timeline__label" role="rowheader">
+                            <a href="{{ path('app_projets_show', { id: row.projet.id }) }}">{{ row.projet.nom }}</a>
+                            <small>{{ row.projet.societe ? row.projet.societe.denomination : '' }}</small>
+                        </div>
+                        <div class="timeline__track" role="cell">
+                            {% if timeline.today is not null %}<span class="timeline__today" style="left: {{ timeline.today }}%" aria-hidden="true"></span>{% endif %}
+                            <span class="timeline__bar {{ statusClass }}{{ row.overdue ? ' is-overdue' : '' }}{{ row.atRisk ? ' is-risk' : '' }}"
+                                  style="left: {{ row.left }}%; width: {{ row.width }}%"
+                                  title="{{ row.start|date('d/m/Y') }} → {{ row.end|date('d/m/Y') }}{{ row.overdue ? ' · en retard' : '' }}{{ row.atRisk ? ' · risque de retard' : '' }}"></span>
+                            <span class="sr-only">Du {{ row.start|date('d/m/Y') }} au {{ row.end|date('d/m/Y') }}, statut {{ row.projet.status }}{{ row.overdue ? ', en retard' : '' }}{{ row.atRisk ? ', risque de retard' : '' }}</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <ul class="timeline-legend">
+            <li><span class="timeline__bar is-todo"></span> À faire</li>
+            <li><span class="timeline__bar is-doing"></span> En cours</li>
+            <li><span class="timeline__bar is-done"></span> Terminé</li>
+            <li><span class="timeline__bar is-overdue is-todo"></span> En retard</li>
+            <li><span class="timeline__bar is-risk is-todo"></span> Risque de retard</li>
+            <li><span class="timeline__today timeline__today--legend"></span> Aujourd’hui</li>
+        </ul>
+    {% endif %}
+</div>
+{% endblock %}

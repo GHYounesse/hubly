@@ -1,0 +1,22 @@
+
+{% block body %}
+    {{ form_start(form, {'action': path('app_developpeur_update',{'id': developpeur.id }), 'method': 'POST'}) }}
+        {{ form_row(form.nom) }}
+        {{ form_row(form.prenom) }}
+        {{ form_row(form.email) }}
+
+        {{ form_row(form.telephone) }}
+        {{ form_row(form.user) }}
+        <div class="modal-footer ">
+            {{ form_widget(form.Enregistrer, {'attr': {'class': 'btn btn-info'}}) }}
+        </div>    
+    {{ form_end(form) }}    
+{% endblock %}
+
+{% block script %}
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2();
+        });
+    </script>
+{% endblock %}

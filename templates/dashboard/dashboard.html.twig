@@ -1,0 +1,157 @@
+{% extends 'layout/admin.html.twig' %}
+
+{% block title %}Tableau de bord - {{ appName }}{% endblock %}
+
+{% block body %}
+{% set statuts = [
+    { key: 'à faire',  label: 'À faire',  css: 'is-todo',  color: 'var(--color-text-secondary)' },
+    { key: 'en cours', label: 'En cours', css: 'is-doing', color: 'var(--color-primary)' },
+    { key: 'terminé',  label: 'Terminé',  css: 'is-done',  color: 'var(--color-success)' },
+] %}
+{% set totalProjets = projetsParStatut|reduce((total, n) => total + n, 0) %}
+
+<div class="content-wrapper">
+    {% include 'layout/_page_header.html.twig' with {
+        title: 'Bonjour ' ~ (app.user.prenom ?: 'et bienvenue'),
+        subtitle: 'Voici ce qui demande votre attention aujourd’hui.',
+        action: { label: 'Nouveau projet', href: path('app_projets_new') }
+    } %}
+
+    <nav class="stat-band" aria-label="Vue d’ensemble">
+        <a class="stat-band__item" href="{{ path('app_projets_index_main') }}">
+            <span class="stat-band__value">{{ projetsCount }}</span>
+            <span class="stat-band__label">Projets</span>
+        </a>
+        <a class="stat-band__item" href="{{ path('app_developpeur_index') }}">
+            <span class="stat-band__value">{{ developpeursCount }}</span>
+            <span class="stat-band__label">Développeurs</span>
+        </a>
+        <a class="stat-band__item" href="{{ path('app_technologie_index') }}">
+            <span class="stat-band__value">{{ technologiesCount }}</span>
+            <span class="stat-band__label">Technologies</span>
+        </a>
+        <a class="stat-band__item" href="{{ path('app_hebergement_index') }}">
+            <span class="stat-band__value">{{ hebergementsCount }}</span>
+            <span class="stat-band__label">Hébergements</span>
+        </a>
+        <a class="stat-band__item" href="{{ path('app_hebergement_index') }}">
+            <span class="stat-band__value">{{ coutAnnuel|number_format(0, ',', ' ') }}</span>
+            <span class="stat-band__label">Budget annuel des hébergements actifs</span>
+        </a>
+    </nav>
+
+    <div class="dash-grid">
+        <section class="panel" aria-labelledby="watch-title">
+            <div class="panel__head">
+                <h2 id="watch-title">À surveiller</h2>
+                <a href="{{ path('app_alertes_notifications') }}">Toutes les alertes</a>
+            </div>
+            <div class="panel__body">
+                {% if hebergementsProches is empty and alertes is empty and sslProches is empty and sitesHorsLigne is empty %}
+                    <div class="empty-state">
+                        <strong>Rien à signaler</strong>
+                        Aucun hébergement n’expire dans les 30 prochains jours et aucune alerte n’est en attente.
+                    </div>
+                {% endif %}
+
+                {% if sitesHorsLigne is not empty %}
+                    <p class="watch-group">Sites hors ligne</p>
+                    {% for check in sitesHorsLigne %}
+                        <div class="watch-item">
+                            <div class="watch-item__main">
+                                <span class="watch-item__title">{{ check.projet.nom ?: 'Projet #' ~ check.projet.id }}</span>
+                                <span class="watch-item__meta">Mesuré le {{ check.checkedAt|date('d/m/Y à H:i') }}{{ check.error ? ' · ' ~ check.error : '' }}</span>
+                            </div>
+                            <span class="pill pill--bad">{{ check.statusCode ? 'HTTP ' ~ check.statusCode : 'Injoignable' }}</span>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% if sslProches is not empty %}
+                    <p class="watch-group">Certificats SSL à renouveler</p>
+                    {% for projet in sslProches %}
+                        {% set diff = date().diff(projet.sslExpiresAt) %}
+                        {% set jours = diff.invert ? -diff.days : diff.days %}
+                        <div class="watch-item">
+                            <div class="watch-item__main">
+                                <span class="watch-item__title">{{ projet.nom }}</span>
+                                <span class="watch-item__meta">Expire le {{ projet.sslExpiresAt|date('d/m/Y') }}</span>
+                            </div>
+                            {% if jours < 0 %}
+                                <span class="pill pill--bad">Expiré</span>
+                            {% else %}
+                                <span class="pill {{ jours <= 14 ? 'pill--warn' : 'pill--info' }}">Dans {{ jours }} j</span>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% if hebergementsProches is not empty %}
+                    <p class="watch-group">Hébergements qui expirent bientôt</p>
+                    {% for h in hebergementsProches %}
+                        {% set diff = date().diff(h.dateExpiration) %}
+                        {% set jours = diff.invert ? -diff.days : diff.days %}
+                        <div class="watch-item">
+                            <div class="watch-item__main">
+                                <span class="watch-item__title">{{ h.site ?: h.url ?: 'Hébergement sans nom' }}</span>
+                                <span class="watch-item__meta">{{ h.fournisseur ?: 'Fournisseur non renseigné' }} · {{ h.dateExpiration|date('d/m/Y') }}</span>
+                            </div>
+                            {% if jours < 0 %}
+                                <span class="pill pill--bad">Expiré depuis {{ -jours }} j</span>
+                            {% elseif jours <= 15 %}
+                                <span class="pill pill--warn">{{ jours == 0 ? 'Expire aujourd’hui' : 'Dans ' ~ jours ~ ' j' }}</span>
+                            {% else %}
+                                <span class="pill pill--info">Dans {{ jours }} j</span>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% if alertes is not empty %}
+                    <p class="watch-group">Alertes non lues</p>
+                    {% for alerte in alertes %}
+                        <div class="watch-item">
+                            <div class="watch-item__main">
+                                <span class="watch-item__title">{{ alerte.title }}</span>
+                                <span class="watch-item__meta">{{ alerte.message }}</span>
+                            </div>
+                            <span class="pill pill--warn">À traiter</span>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </section>
+
+        <section class="panel" aria-labelledby="status-title">
+            <div class="panel__head">
+                <h2 id="status-title">Projets par statut</h2>
+                <a href="{{ path('app_projets_index_main') }}">Voir les projets</a>
+            </div>
+            <div class="panel__body">
+                {% if totalProjets == 0 %}
+                    <div class="empty-state">
+                        <strong>Aucun projet pour le moment</strong>
+                        Créez votre premier projet pour suivre son avancement ici.
+                        <div class="mt-3"><a class="btn btn-primary" href="{{ path('app_projets_new') }}">Créer un projet</a></div>
+                    </div>
+                {% else %}
+                    <div class="status-bar" role="img" aria-label="Répartition des {{ totalProjets }} projets par statut">
+                        {% for statut in statuts %}
+                            {% set n = projetsParStatut[statut.key] ?? 0 %}
+                            {% if n > 0 %}<span class="{{ statut.css }}" style="flex: {{ n }}"></span>{% endif %}
+                        {% endfor %}
+                    </div>
+                    <ul class="status-legend">
+                        {% for statut in statuts %}
+                            <li>
+                                <span><span class="dot" style="background: {{ statut.color }}"></span>{{ statut.label }}</span>
+                                <strong>{{ projetsParStatut[statut.key] ?? 0 }}</strong>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

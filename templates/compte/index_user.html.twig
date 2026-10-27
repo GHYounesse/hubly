@@ -1,0 +1,56 @@
+{% extends 'layout/user.html.twig' %}
+
+{% block title %}{{appName}}{% endblock %}
+
+{% block stylesheets %}
+<style>
+   .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+{% endblock %}
+
+{% block body %}
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-lg-12 grid-margin grid-margin-lg-0 stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="container mt-5 border border-1 border-info p-5 rounded-3 shadow-sm  m-5">
+                            <h2>Mon Compte</h2>
+                                {% if form is defined %}
+                                    {{ form_start(form) }}
+                                        <div class="form-group">
+                                            <label for="prenom">Prénom</label>
+                                            {{ form_widget(form.prenom, {'attr': {'class': 'form-control', 'readonly': true}}) }}
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="nom">Nom</label>
+                                            {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'readonly': true}}) }}
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="email">Email</label>
+                                            {{ form_widget(form.email, {'attr': {'class': 'form-control', 'readonly': true}}) }}
+                                        </div>      
+                                        <div class="form-group">
+                                            <label for="statut">Statut</label>
+                                            {{ form_widget(form.statut, {'attr': {'class': 'form-control', 'readonly': true}}) }}
+                                        </div> 
+                                        <div class="form-group">
+                                            <label for="role">Rôle</label>
+                                            {{ form_widget(form.roles, {'attr': {'class': 'form-control', 'readonly': true}}) }}
+                                        </div> 
+                                        <a href="{{ path('app_dashboard') }}" class="btn btn-info mt-3">Annuler</a>
+                                    {{ form_end(form) }}
+                                {% else %}
+                                    <p class="text-danger">Aucun utilisateur trouvé.</p>
+                                {% endif %}
+                        </div>
+                    </div>  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

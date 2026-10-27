@@ -1,0 +1,21 @@
+{# Applies the saved (or system) theme before first paint to avoid a flash; exposes hublyToggleTheme() #}
+<script>
+(function () {
+    var KEY = 'hubly-theme', root = document.documentElement;
+    function apply(theme) {
+        root.classList.toggle('dark-theme', theme === 'dark');
+        root.setAttribute('data-bs-theme', theme);
+    }
+    var theme = null;
+    try { theme = localStorage.getItem(KEY); } catch (e) {}
+    if (theme !== 'dark' && theme !== 'light') {
+        theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    apply(theme);
+    window.hublyToggleTheme = function () {
+        var next = root.classList.contains('dark-theme') ? 'light' : 'dark';
+        apply(next);
+        try { localStorage.setItem(KEY, next); } catch (e) {}
+    };
+})();
+</script>

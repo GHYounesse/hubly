@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    }
+
+    .error-wrapper {
+        min-height: 100vh;
+    }
+
+    .error-card {
+        border: 0;
+        border-radius: 1.5rem;
+        box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.08);
+        max-width: 650px;
+        width: 100%;
+    }
+
+    .error-code {
+        font-size: 5rem;
+        font-weight: 800;
+        color: var(--bs-primary);
+        line-height: 1;
+    }
+
+    .error-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #212529;
+    }
+
+    .error-message {
+        color: #6c757d;
+        font-size: 1rem;
+    }
+
+    .btn-home {
+        padding: 0.8rem 2rem;
+        border-radius: 0.75rem;
+        font-weight: 600;
+    }
+
+    .error-icon {
+        width: 90px;
+        height: 90px;
+        background: rgba(var(--bs-primary-rgb), 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        font-size: 2.5rem;
+        color: var(--bs-primary);
+        font-weight: bold;
+    }
+</style>
+
+<div class="container-fluid error-wrapper d-flex justify-content-center align-items-center">
+    <div class="card error-card">
+        <div class="card-body text-center p-5">
+
+            <div class="error-icon mb-4">
+                !
+            </div>
+
+            <div class="error-code mb-3">
+                {{ status_code }}
+            </div>
+
+            <h1 class="error-title mb-3">
+                {{ exception ? exception.message : 'Une erreur est survenue' }}
+            </h1>
+
+            <p class="error-message mb-4">
+                Une erreur inattendue s’est produite. Veuillez réessayer ou revenir à l’accueil.
+            </p>
+
+            <a href="{{ path('app_dashboard') }}" class="btn btn-info btn-home shadow-sm">
+                Retour à l'accueil
+            </a>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

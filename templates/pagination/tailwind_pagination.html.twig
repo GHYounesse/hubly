@@ -1,0 +1,54 @@
+{# templates/pagination/tailwind_pagination.html.twig #}
+{% if pageCount > 1 %}
+<nav class="container mx-auto flex items-center justify-between mb-8 border-t border-gray-200 dark:border-white/10">
+  {# Previous button #}
+  <div class="-mt-px flex w-0 flex-1">
+    {% if previous is defined %}
+      <a href="{{ path(route, query|merge({(pageParameterName): previous})) }}"
+         class="hover:!no-underline inline-flex items-center border-t-2 border-transparent pr-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:border-white/20 dark:hover:text-gray-200">
+        <svg viewBox="0 0 20 20" fill="currentColor" class="mr-3 size-5 text-gray-400 dark:text-gray-500">
+          <path d="M18 10a.75.75 0 0 1-.75.75H4.66l2.1 1.95a.75.75 0 1 1-1.02 1.1l-3.5-3.25a.75.75 0 0 1 0-1.1l3.5-3.25a.75.75 0 1 1 1.02 1.1l-2.1 1.95h12.59A.75.75 0 0 1 18 10Z" />
+        </svg>
+        Précédent
+      </a>
+    {% endif %}
+  </div>
+
+  {# Page numbers #}
+  <div class="hidden md:-mt-px md:flex">
+    {% for page in pagesInRange %}
+      {% if page == current %}
+        <a href="#" aria-current="page"
+           class="hover:!no-underline inline-flex items-center border-t-2 border-blue-500 px-4 pt-4 text-sm font-medium text-blue-600 dark:border-blue-400 dark:text-blue-400">
+          {{ page }}
+        </a>
+      {% else %}
+        <a href="{{ path(route, query|merge({(pageParameterName): page})) }}"
+           class="hover:!no-underline inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:border-white/20 dark:hover:text-gray-200">
+          {{ page }}
+        </a>
+      {% endif %}
+    {% endfor %}
+    {% if next is defined and (current + 1) < pageCount %}
+      <span class="hover:!no-underline inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500">...</span>
+      <a href="{{ path(route, query|merge({(pageParameterName): pageCount})) }}"
+         class="hover:!no-underline inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:border-white/20 dark:hover:text-gray-200">
+        {{ pageCount }}
+      </a>
+    {% endif %}
+  </div>
+
+  {# Next button #}
+  <div class="-mt-px flex w-0 flex-1 justify-end">
+    {% if next is defined %}
+      <a href="{{ path(route, query|merge({(pageParameterName): next})) }}"
+         class="inline-flex items-center hover:!no-underline border-t-2 border-transparent pl-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:border-white/20 dark:hover:text-gray-200">
+        Suivant
+        <svg viewBox="0 0 20 20" fill="currentColor" class="ml-3 size-5 text-gray-400 dark:text-gray-500">
+          <path d="M2 10a.75.75 0 0 1 .75-.75h12.59l-2.1-1.95a.75.75 0 1 1 1.02-1.1l3.5 3.25a.75.75 0 0 1 0 1.1l-3.5 3.25a.75.75 0 1 1-1.02-1.1l2.1-1.95H2.75A.75.75 0 0 1 2 10Z" />
+        </svg>
+      </a>
+    {% endif %}
+  </div>
+</nav>
+{% endif %}

@@ -1,0 +1,25 @@
+{% block body %}
+        {{ form_start(form, {'action': path('app_projets_update',{'id': projets.id }), 'method': 'POST'}) }}
+            {{ form_row(form.nom) }}
+            {{ form_row(form.type) }}
+            {{ form_row(form.description) }}
+            {{ form_row(form.accesEnvironnement) }}
+            {{ form_row(form.technologie) }}
+            {{ form_row(form.developpeur) }}
+            {{ form_row(form.hebergement) }}
+            {{ form_row(form.accesCodeSource) }}
+            {{ form_row(form.url) }}
+            {{ form_row(form.status) }}
+            <div class="modal-footer ">
+                {{ form_widget(form.Enregistrer, {'attr': {'class': 'btn btn-info'}}) }}
+            </div>    
+        {{ form_end(form) }}    
+{% endblock %}
+
+{% block script %}
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2();
+        });
+    </script>
+{% endblock %}

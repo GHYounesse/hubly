@@ -1,0 +1,59 @@
+{% import _self as audit %}
+
+{% macro value(v) %}
+    {%- if v is null -%}<em>vide</em>
+    {%- elseif v is same as(true) -%}oui
+    {%- elseif v is same as(false) -%}non
+    {%- else -%}{{ v }}
+    {%- endif -%}
+{% endmacro %}
+
+{% if historiques is not empty %}
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Action</th>
+                <th>Entité</th>
+                <th>Détail</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for historique in historiques %}
+                {% set action = historique.action %}
+                <tr>
+                    <td class="text-nowrap">{{ historique.dateModification ? historique.dateModification|date('d/m/Y H:i') : 'Non définie' }}</td>
+                    <td>
+                        <span class="pill {{ { creation: 'pill--ok', modification: 'pill--info', suppression: 'pill--bad' }[action] ?? '' }}">
+                            {{ { creation: 'Création', modification: 'Modification', suppression: 'Suppression' }[action] ?? action|capitalize }}
+                        </span>
+                    </td>
+                    <td>{{ historique.entiteModifiee }}</td>
+                    <td>
+                        <div>{{ getDescriptionHistorique(historique.entiteModifiee, historique.entiteModifieeId, action, historique.user.email) }}</div>
+                        {% if historique.changes is not empty %}
+                            <ul class="audit-diff">
+                                {% for field, change in historique.changes %}
+                                    <li>
+                                        <span class="audit-diff__field">{{ field|audit_field }}</span>
+                                        <del>{{ audit.value(change.old) }}</del>
+                                        <span aria-hidden="true">→</span>
+                                        <span class="sr-only">devient</span>
+                                        <ins>{{ audit.value(change.new) }}</ins>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+    <div class="empty-state">
+        <strong>Aucune modification trouvée</strong>
+        Essayez un autre nom d’entité, par exemple « Projet » ou « Hebergement ».
+    </div>
+{% endif %}

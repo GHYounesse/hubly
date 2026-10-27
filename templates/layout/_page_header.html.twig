@@ -1,0 +1,25 @@
+{# Usage:
+   {% include 'layout/_page_header.html.twig' with {
+       title: 'Hébergements',
+       subtitle: '...',
+       action: { label: 'Ajouter', href: path('...') },                        (optional, primary button)
+       secondary: [{ label: 'Exporter en CSV', href: path('...') }]            (optional, outline buttons)
+   } %} #}
+<header class="page-header">
+    <div>
+        <h1>{{ title }}</h1>
+        {% if subtitle is defined and subtitle %}<p class="page-header__sub">{{ subtitle }}</p>{% endif %}
+    </div>
+    {% if (action is defined and action) or (secondary is defined and secondary) %}
+        <div class="page-header__actions">
+            {% if secondary is defined and secondary %}
+                {% for link in secondary %}
+                    <a class="btn btn-secondary" href="{{ link.href }}">{{ link.label }}</a>
+                {% endfor %}
+            {% endif %}
+            {% if action is defined and action %}
+                <a class="btn btn-primary" href="{{ action.href }}">{{ action.label }}</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</header>

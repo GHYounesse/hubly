@@ -1,0 +1,462 @@
+{% extends 'layout/admin.html.twig' %}
+
+{% block title %}Ajouter un projet - {{appName}}{% endblock %}
+
+
+{% block body %}
+	{% set societeId = app.request.query.get('societe') is defined ? app.request.query.get('societe') : null %}
+
+	{{ form_start(form, {'action': path('app_projets_new'), 'method': 'POST'}) }}
+	
+		<div class="content-wrapper">
+			<div class="form-page">
+				<div class="form-band">
+					<h2 class="text-2xl font-bold text-white">Ajouter un projet</h2>
+				</div>
+				
+
+				<div
+					class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 p-4">
+
+					<!-- Nom -->
+					<div class="sm:col-span-2">
+						{{ form_label(
+							form.nom,
+							null,
+							{ 
+								label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+								label_html: true 
+							}
+						) }}
+
+						<div class="mt-2">
+							{{ form_widget(form.nom, { attr: { class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+							{{ form_errors(form.nom) }}
+						</div>
+
+					</div>
+
+					<!-- Type -->
+					<div class="sm:col-span-2">
+						{{ form_label(
+							form.type,
+							null,
+							{ 
+								label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+								label_html: true 
+							}
+						) }}
+						<div class="mt-2">
+							{{ form_widget(form.type, { attr: { class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+							{{ form_errors(form.type) }}
+						</div>
+					</div>
+
+					<!-- Société -->
+					<div class="sm:col-span-2">
+						{{ form_label(
+							form.societe,
+							null,
+							{ 
+								label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+								label_html: true 
+							}
+						) }}
+						<div class="mt-2">
+							{{ form_widget(form.societe, { attr: { class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+							{{ form_errors(form.societe) }}
+						</div>
+					</div>
+
+					<!-- URL -->
+					<div class="col-span-3">
+						{{ form_label(
+							form.url,
+							null,  
+							{ 
+								label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+								label_html: true 
+							}
+						) }}
+						<div class="mt-2">
+							{{ form_widget(form.url, { attr: { rows: 3, class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+							{{ form_errors(form.url) }}
+						</div>
+					</div>
+
+					<!-- Priorite -->
+					<div class="col-span-3">
+						{{ form_label(
+							form.priorite,
+							null,
+							{ 
+								label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+								label_html: true 
+							}
+						) }}
+						<div class="mt-2">
+							{{ form_widget(form.priorite, { attr: { rows: 3, class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+							{{ form_errors(form.priorite) }}
+						</div>
+					</div>
+
+					<!-- Accés code source -->
+					<div class="col-span-3">
+						{{ form_label(
+							form.accesCodeSource,
+							null,
+							{ 
+								label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+								label_html: true 
+							}
+						) }}
+						<div class="mt-2">
+							{{ form_widget(form.accesCodeSource, { attr: { rows: 3, class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+							{{ form_errors(form.accesCodeSource) }}
+						</div>
+					</div>
+
+					<!-- Acces Environnement -->
+					<div class="sm:col-span-3">
+						{{ form_label(
+							form.accesEnvironnement,
+							null,
+							{ 
+								label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+								label_html: true 
+							}
+						) }}
+						<div class="mt-2">
+							{{ form_widget(form.accesEnvironnement, { attr: { class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+							{{ form_errors(form.accesEnvironnement) }}
+						</div>
+					</div>
+
+					<!-- Téchnologie -->
+					<div class="sm:col-span-3">
+						{{ form_label(
+							form.technologie,
+							null,
+							{ 
+								label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+								label_html: true 
+							}
+						) }}
+						<div class="mt-2">
+							{{ form_widget(form.technologie, { attr: { class: 'col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:focus:outline-blue-500' } }) }}
+							{{ form_errors(form.technologie) }}
+						</div>
+					</div>
+
+					<!-- Développeur -->
+					<div class="sm:col-span-3">
+						{{ form_label(
+							form.developpeur,
+							null,
+							{ 
+								label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+								label_html: true 
+							}
+						) }}
+						<div class="mt-2">
+							{{ form_widget(form.developpeur, { attr: { class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+							{{ form_errors(form.developpeur) }}
+						</div>
+					</div>
+
+					<!-- Hébergement -->
+					<div class="sm:col-span-3">
+						{{ form_label(
+							form.hebergement,
+							null,
+							{ 
+								label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+								label_html: true 
+							}
+						) }}
+						<div class="mt-2">
+							{{ form_widget(form.hebergement, { attr: { class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+							{{ form_errors(form.hebergement) }}
+						</div>
+					</div>
+
+					<!-- Superviseur -->
+					<div class="col-span-3">
+						{{ form_label(
+							form.suiviPar,
+							null,
+							{ 
+								label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+								label_html: true 
+							}
+						) }}
+						<div class="mt-2">
+							{{ form_widget(form.suiviPar, { attr: { rows: 3, class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+							{{ form_errors(form.suiviPar) }}
+						</div>
+					</div>
+
+					<!-- Developpeur principal -->
+					<div class="col-span-3">
+						{{ form_label(
+							form.developpeurPrincipal,
+							null,
+							{ 
+								label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+								label_html: true 
+							}
+						) }}
+						<div class="mt-2">
+							{{ form_widget(form.developpeurPrincipal, { attr: { rows: 3, class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+							{{ form_errors(form.developpeurPrincipal) }}
+						</div>
+					</div>
+
+					<!-- Commercial -->
+					<div class="col-span-3">
+						{{ form_label(
+							form.commercial,
+							null,
+							{ 
+								label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+								label_html: true 
+							}
+						) }}
+						<div class="mt-2">
+							{{ form_widget(form.commercial, { attr: { rows: 3, class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+							{{ form_errors(form.commercial) }}
+						</div>
+					</div>
+
+					<!-- Date Commande -->
+					<div class="col-span-3">
+						{{ form_label(
+							form.dateCommande,
+							null,
+							{ 
+								label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+								label_html: true 
+							}
+						) }}
+						<div class="mt-2">
+							{{ form_widget(form.dateCommande, { attr: { rows: 3, class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+							{{ form_errors(form.dateCommande) }}
+						</div>
+					</div>
+
+					<!-- Date Livraison -->
+					<div class="col-span-3">
+						{{ form_label(
+							form.dateLivraison,
+							null,
+							{ 
+								label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+								label_html: true 
+							}
+						) }}
+						<div class="mt-2">
+							{{ form_widget(form.dateLivraison, { attr: { rows: 3, class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+							{{ form_errors(form.dateLivraison) }}
+						</div>
+					</div>
+
+					<!-- Remarques -->
+					<div class="sm:col-span-3">
+						{{ form_label(
+							form.remarques,
+							null,
+							{ 
+								label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+								label_html: true 
+							}
+						) }}
+						<div class="mt-2">
+							{{ form_widget(form.remarques, { attr: { class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+							{{ form_errors(form.remarques) }}
+						</div>
+					</div>
+
+					<!-- Risques de livraison -->
+					<div class="sm:col-span-3">
+						{{ form_label(
+							form.risqueLivraison,
+							null,
+							{ 
+								label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+								label_html: true 
+							}
+						) }}
+						<div class="mt-2">
+							{{ form_widget(form.risqueLivraison, { attr: { class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+							{{ form_errors(form.risqueLivraison) }}
+						</div>
+					</div>
+
+					<!-- Description -->
+					<div class="sm:col-span-3">
+						{{ form_label(
+							form.description,
+							null,
+							{ 
+								label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+								label_html: true 
+							}
+						) }}
+						<div class="mt-2">
+							{{ form_widget(form.description, { attr: { class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+							{{ form_errors(form.description) }}
+						</div>
+					</div>
+
+					<div class="sm:col-span-3">					
+						<div class="flex items-center">
+							<!-- Etat projet -->
+							<div class="">
+								<p class="!ml-1 mr-4 !my-0 text-sm font-medium text-gray-900 dark:text-white">Etat du projet</p>
+								<!-- projet Testé -->
+								<div class="flex items-center gap-2">
+									<input type="hidden" class="!pl-5"/>
+									{{ form_widget(form.projetTeste, {
+										attr: { class: '!ml-0 !my-0 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500' },
+										label: null,
+										label_html: true
+									}) }}
+									{{ form_errors(form.projetTeste) }}
+								</div>
+
+								<!-- projet Validé -->
+								<div class="flex items-center gap-2">
+									{{ form_widget(form.projetValide, {
+										attr: { class: '!ml-0 !my-0 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500' },
+										label: null,
+										label_html: true
+									}) }}
+									{{ form_errors(form.projetValide) }}
+								</div>
+							</div>
+
+							<!-- Client -->
+							<div class="ml-5">
+								<p class="!ml-1 mr-4 !my-0 text-sm font-medium text-gray-900 dark:text-white">Client</p>
+								<!-- Client consommé gratuité -->
+								<div class="flex items-center gap-2">
+									{{ form_widget(form.clientGratuite, {
+										attr: { class: '!ml-0 !my-0 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500' },
+										label: null,
+										label_html: true
+									}) }}
+									{{ form_errors(form.clientGratuite) }}
+								</div>
+
+								<!-- Client a demandé amélioration -->
+								<div class="flex items-center gap-2">
+									{{ form_widget(form.clientAmeliorations, {
+										attr: { class: '!ml-0 !my-0 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500' },
+										label: null,
+										label_html: true
+									}) }}
+									{{ form_errors(form.clientAmeliorations) }}
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Statut -->
+					<div class="col-span-full">
+						{{ form_label(
+							form.status,
+							null,
+							{ 
+								label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+								label_html: true 
+							}
+						) }}
+						<div class="mt-2">
+							{{ form_widget(form.status, { attr: { rows: 3, class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+							{{ form_errors(form.status) }}
+						</div>
+					</div>
+				</div>
+				<div class="container !my-6 flex items-center justify-end gap-x-6">
+					{% if societeId  %}
+						<a href="{{ path('app_societe_projets', { id: societeId }) }}" class="text-sm hover:no-underline hover:text-gray-900 font-semibold px-3 py-2 !border !border-gray-700 !rounded-lg text-gray-900 dark:text-white">Annuler</a>
+					{% else %}
+						<a href="{{ path('app_societes') }}" class="text-sm font-semibold hover:no-underline hover:text-gray-900 px-3 py-2 !border !border-gray-700 !rounded-lg text-gray-900 dark:text-white">Annuler</a>
+					{% endif %}
+
+					<button type="submit" onclick="this.disabled=true; this.form.submit();" class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:bg-blue-500 dark:shadow-none dark:focus-visible:outline-blue-500">
+						Ajouter
+					</button>
+				</div>
+			</div>
+		</div>
+
+		
+		
+	{{ form_end(form) }}
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+
+			const projetTechnologie = document.getElementById('projet_technologie');
+			const projetDeveloppeur = document.getElementById('projet_developpeur');
+			const projetHebergement = document.getElementById('projet_hebergement');
+
+			if (projetTechnologie && typeof TomSelect !== 'undefined') {
+				new TomSelect("#projet_technologie", {
+					plugins: ['remove_button'],
+					create: false,
+					maxItems: null,
+					placeholder: 'Choisissez les technologies...',
+					sortField: {
+						field: "text",
+						direction: "asc"
+					},
+					onInitialize: function () {
+						this.control.classList.add('!border-none', '!px-0',);
+					}
+				});
+			} else {
+					console.error("Missing projet technologie or TomSelect library");
+			}
+
+			if (projetDeveloppeur && typeof TomSelect !== 'undefined') {
+				new TomSelect("#projet_developpeur", {
+					plugins: ['remove_button'],
+					create: false,
+					maxItems: null,
+					placeholder: 'Choisissez les developpeurs...',
+					sortField: {
+						field: "text",
+						direction: "asc"
+					},
+					onInitialize: function () {
+						this.control.classList.add('!border-none', '!px-0',);
+						this.wrapper.classList.add('!pr-[25px]');
+					}
+				});
+			} else {
+					console.error("Missing projet developpeur or TomSelect library");
+			}
+
+			if (projetHebergement && typeof TomSelect !== 'undefined') {
+				new TomSelect("#projet_hebergement", {
+					plugins: ['remove_button'],
+					create: false,
+					maxItems: null,
+					placeholder: 'Choisissez les hebergements...',
+					sortField: {
+						field: "text",
+						direction: "asc"
+					},
+					onInitialize: function () {
+						this.control.classList.add('!border-none', '!px-0');
+						this.wrapper.classList.add('!pr-[25px]');
+					}
+				});
+			} else {
+					console.error("Missing projet hebergement or TomSelect library");
+			}
+		});
+	</script>
+{% endblock  %}

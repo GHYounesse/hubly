@@ -1,0 +1,266 @@
+{% extends 'layout/admin.html.twig' %}
+
+{% block title %}Hébergements - {{appName}}{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+        h2{
+            color:#777977;
+            margin-left:20%;
+        
+        }
+        .modal-content {
+            background-color: #f2f2f2; /* Ou la couleur que tu veux, ex: #dddddd, #fafafa, etc. */
+            color: #333; /* facultatif : couleur du texte */
+        }
+        .modal-header, .modal-body, .modal-footer {
+            background-color: transparent; /* ou un autre si tu veux des parties différentes */
+        }
+        .btn.btn-icon {
+            width: 30px;
+            height: 30px;
+            margin-right: 7px;
+        }
+        .btn.btn-social-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 50px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="content-wrapper">
+    {% include 'layout/_page_header.html.twig' with { title: 'Hébergements', subtitle: 'Suivez les fournisseurs, les domaines et les dates d’expiration.', secondary: [{ label: 'Exporter en CSV', href: path('app_export_hebergements') }] } %}
+    <div class="row">
+        <div class="col-lg-12 grid-margin grid-margin-lg-0 stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        {# <div class="col-md-8">
+                                {% include 'search/search.html.twig' with { 'form': form } %}
+                        </div> #}
+
+                        <div class="col-12">
+                            {% if form is defined %}
+                                {% include 'search/hebergement-filters.html.twig' with { 'form': form } %}
+                            {% endif %}
+                        </div>
+                        
+                        
+                        
+                    </div>
+                             <!-- Tableau Global (Visible par défaut) -->
+                    <div id="global-table-container" class="table-responsive">
+                        {% include 'hebergement/_search_result.html.twig' with { 'hebergements': hebergements } %}
+                    </div>
+
+                            <!-- Résultats de la recherche (Cachés par défaut) -->
+                    <div id="search-results" style="display: none;"></div>
+
+                            <!-- Spinner de chargement -->
+                    <div id="loading-spinner" class="text-center my-4" style="display: none;"> 
+                        <div class="spinner-border text-info" role="status">
+                            <span class="visually-hidden"></span>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal pop_up-->
+{# <div class="modal fade" id="hebergementModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+
+    <div class="modal-content">
+      <div class=" ">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+            <h1 class="modal-title text-info w-100 text-center mb-4" id="name" style="display: none;"></h1>                  
+      <div class="modal-body">
+      </div>
+    </div>
+  </div>
+</div> #}
+<el-dialog>
+    <dialog id="hebergementModal" aria-labelledby="dialog-title" class="fixed inset-0 m-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent p-0 backdrop:bg-transparent">
+        <el-dialog-backdrop class="fixed inset-0 bg-gray-500/75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in dark:bg-gray-900/50"></el-dialog-backdrop>
+
+        <div tabindex="0" class="flex min-h-full items-end justify-center p-4 text-center focus:outline focus:outline-0 sm:items-center sm:p-0">
+            <el-dialog-panel style="padding:0!important" class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-lg sm:p-6 data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95 dark:bg-gray-800 dark:outline dark:outline-1 dark:-outline-offset-1 dark:outline-white/10">
+                <!--
+                <div class="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
+                    <button type="button" command="close" commandfor="dialog" class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-indigo-600 dark:bg-gray-800 dark:hover:text-gray-300 dark:focus:outline-white">
+                        <span class="sr-only">Close</span>
+                        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6">
+                            <path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+                -->
+                <div  id="hebergementModal-form" class="border border-gray-200 rounded-lg dark:border-gray-700">
+                    
+                </div>
+                
+                    
+               
+            </el-dialog-panel>
+        </div>
+    </dialog>
+</el-dialog>
+
+
+<el-dialog>
+    <dialog id="dialog" aria-labelledby="dialog-title" class="fixed inset-0 m-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent p-0 backdrop:bg-transparent">
+        <el-dialog-backdrop class="fixed inset-0 bg-gray-500/75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in dark:bg-gray-900/50"></el-dialog-backdrop>
+
+        <div tabindex="0" class="flex min-h-full items-end justify-center p-4 text-center focus:outline focus:outline-0 sm:items-center sm:p-0">
+            <el-dialog-panel class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-lg sm:p-6 data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95 dark:bg-gray-800 dark:outline dark:outline-1 dark:-outline-offset-1 dark:outline-white/10">
+                <div class="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
+                    <button type="button" command="close" commandfor="dialog" class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-indigo-600 dark:bg-gray-800 dark:hover:text-gray-300 dark:focus:outline-white">
+                        <span class="sr-only">Close</span>
+                        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6">
+                            <path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="sm:flex sm:items-start">
+                    <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:size-10 dark:bg-red-500/10">
+                        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6 text-red-600 dark:text-red-400">
+                            <path d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="!mt-3 !text-center sm:!ml-4 sm:!mt-0 sm:!text-left">
+                        <h3 id="dialog-title" class="text-base !text-left !font-semibold !text-gray-900 dark:text-white">
+                            Supprimer l'hébergement
+                            <span id="modalSocieteName" class="font-semibold text-gray-900 dark:text-white"></span>
+                            ?
+                        </h3>
+                        <div class="mt-2">
+                            <p class="!text-sm !text-left !text-gray-500 dark:text-gray-400">Cette action est
+                                <span class="font-semibold text-red-600 dark:text-red-400">définitive</span>
+                                et entraînera la perte de toutes les données associées.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="!mt-5 sm:!mt-4 sm:flex sm:!flex-row-reverse">
+                    <button id="confirm-delete" type="button" command="close" commandfor="dialog" class="inline-flex w-full justify-center rounded-md !bg-red-600 !px-3 !py-2 !text-sm !font-semibold !text-white !shadow-sm hover:!bg-red-500 sm:!ml-3 sm:!w-auto dark:bg-red-500 dark:shadow-none dark:hover:bg-red-400">Supprimer</button>
+                    <button id="cancel-delete" type="button" command="close" commandfor="dialog" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm !ring-1 !ring-inset !ring-gray-300 hover:bg-gray-50 sm:!mt-0 sm:w-auto dark:bg-white/10 dark:text-white dark:shadow-none dark:ring-white/5 dark:hover:bg-white/20">Cancel</button>
+                </div>
+            </el-dialog-panel>
+        </div>
+    </dialog>
+</el-dialog>
+
+<!-- modal de delet  -->
+{% include 'hebergement/delete.html.twig'%}
+
+<!-- modal de show  -->
+<div class="modal" tabindex="-1" id="show" >
+ <div class="modal-dialog modal-lg"> {# Exemple avec modal-lg #}
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-info w-100 text-center mb-4" id="showModalTitle"></h5>
+            </div>
+
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script> 
+    // add hebergement modal
+    $(document).on('click', '.new', function () {
+        $('#name').hide();
+        $('#hebergementModal-form').html(
+                '<div class="text-center py-6">Chargement...</div>'
+            );
+        $.ajax({
+            type: "GET",
+            url: "/hebergement/new",
+            cache: false,
+            success: function (data) {
+                $('#hebergementModal-form').html(data);
+                //$('#hebergementModal').modal('show');
+            },
+            error: function (e) {
+                console.error("Erreur lors du chargement :", e);
+            }
+        });
+        const checkbox = document.getElementById('hebergement_estActif');
+        if (checkbox) {
+            checkbox.classList.remove('form-check-input'); // remove Bootstrap class
+            checkbox.classList.add(
+                'h-4', 'w-4', 'rounded', 'border-gray-300', 'text-blue-600', 'focus:ring-blue-500'
+            );
+        }
+    });
+
+    // update hebergement modal
+    $(document).on('click', '.update', function () {
+        let id = $(this).data('id');
+        let nom = $(this).data('nom');
+        console.log("ID récupéré :", id); // <-- pour voir si c'est vide
+        console.log("Nom récupéré :", nom);
+        $('#hebergementModal-form').html(
+                '<div class="text-center py-6">Chargement...</div>'
+            );
+        if (!id) {
+            console.error("Aucun ID n’a été trouvé dans data-id !");
+            return;
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "/hebergement/update/"+id,
+            cache: false,
+            success: function (data) {
+                // Injecter la réponse dans la modal
+                $('#hebergementModal-form').html(data);
+                // Afficher la modal
+                //$('#hebergementModal').modal('show');
+            },
+            error: function (e) {
+                console.error("Erreur lors du chargement :", e);
+            }
+        });
+    });
+
+    // delete hebergement modal
+	document.addEventListener("DOMContentLoaded", () => {
+		const modal = document.getElementById("dialog");
+		const cancelBtn = document.getElementById("cancel-delete");
+		const confirmBtn = document.getElementById("confirm-delete");
+		let currentForm = null;
+
+		document.querySelectorAll(".delete-btn").forEach(button => {
+			button.addEventListener("click", () => {
+				const name = button.dataset.name;
+				currentForm = button.closest("form");
+				modal.showModal();
+			});
+		});
+
+		cancelBtn.addEventListener("click", () => {
+			currentForm = null;
+			modal.close();
+		});
+
+		confirmBtn.addEventListener("click", () => {
+			if (currentForm) currentForm.submit();
+		});
+	});
+</script>
+{% endblock %}

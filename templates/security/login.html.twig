@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion - {{ appName }}{% endblock %}
+
+{% block body %}
+<div class="auth-shell">
+    <aside class="auth-aside">
+        <span class="hubly-brand"><img src="{{ asset('images/hubly-mark.svg') }}" alt="" width="40" height="44"><span>{{ appName }}</span></span>
+        <div>
+            <h2>Centralisez. Gérez. Sécurisez.</h2>
+            <ul>
+                <li>Projets, sociétés, développeurs et hébergements au même endroit</li>
+                <li>Alertes avant l’expiration d’un hébergement</li>
+                <li>Accès protégé par rôles et code de vérification</li>
+            </ul>
+        </div>
+        <small>Espace réservé à l’équipe.</small>
+    </aside>
+
+    <main class="auth-main">
+        <div class="auth-card">
+            <span class="hubly-brand"><img src="{{ asset('images/hubly-mark.svg') }}" alt="" width="34" height="38"><span>{{ appName }}</span></span>
+            <h1>Se connecter</h1>
+            <p class="lead-sm">Entrez vos identifiants pour accéder à votre espace.</p>
+
+            <form method="post" action="{{ path('app_login') }}" novalidate>
+                {% if error %}
+                    <div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+
+                {% if app.user %}
+                    <div class="alert alert-info">
+                        Vous êtes connecté en tant que {{ app.user.userIdentifier }}.
+                        <a href="{{ path('app_logout') }}">Se déconnecter</a>
+                    </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label for="username">Adresse e-mail</label>
+                    <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus placeholder="prenom.nom@entreprise.com">
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                </div>
+
+                <button class="btn btn-primary btn-lg btn-block" type="submit">Se connecter</button>
+
+                <p class="mt-4 mb-0 text-muted">Pas de compte ? Demandez un accès à l’administrateur.</p>
+            </form>
+        </div>
+    </main>
+</div>
+{% endblock %}

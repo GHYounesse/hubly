@@ -1,0 +1,161 @@
+<div >
+<div class="form-band">
+        
+        <h2 class="!mx-0 !text-2xl font-semibold text-white">Modifier un hébergement</h2>
+        
+    </div>
+
+{% block body %}
+	{{ form_start(form, {'action': path('app_hebergement_update' ,{'id':hebergement.id}), 'method': 'POST','attr': { 'class': ' px-4 py-2' }}) }}
+	<div class="!mt-4 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
+		<div class="sm:col-span-full">
+			{{ form_label(
+                form.site,
+                null,
+                { 
+                    label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+                    label_html: true 
+                }
+            ) }}
+
+			<div class="mt-2">
+				{{ form_widget(form.site, { attr: { class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+				{{ form_errors(form.site) }}
+			</div>
+
+		</div>
+
+		<div class="sm:col-span-full">
+			{{ form_label(
+                form.fournisseur,
+                null,
+                { 
+                    label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+                    label_html: true 
+                }
+            ) }}
+
+			<div class="mt-2">
+				{{ form_widget(form.fournisseur, { attr: { class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+				{{ form_errors(form.fournisseur) }}
+			</div>
+
+		</div>
+		<div class="sm:col-span-full">
+            <label for="estActif" class="text-sm font-medium text-gray-900 dark:text-white">
+                Statut
+            </label>
+            <div class="mt-2">
+            {{ form_widget(form.estActif) }}
+            
+            {{ form_errors(form.estActif) }}
+            </div>
+        </div>
+
+		<div class="sm:col-span-full">
+			{{ form_label(
+                form.type,
+                null,
+                { 
+                    label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+                    label_html: true 
+                }
+            ) }}
+
+			<div class="mt-2">
+				{{ form_widget(form.type, { attr: { class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+				{{ form_errors(form.type) }}
+			</div>
+
+		</div>
+
+		<div class="sm:col-span-full">
+			{{ form_label(
+                form.url,
+                null,
+                { 
+                    label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+                    label_html: true 
+                }
+            ) }}
+
+			<div class="mt-2">
+				{{ form_widget(form.url, { attr: { class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+				{{ form_errors(form.url) }}
+			</div>
+
+		</div>
+
+		        <div class="sm:col-span-3">
+            {{ form_label(form.prix, null, { label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, label_html: true }) }}
+            <div class="mt-2">
+                {{ form_widget(form.prix, { attr: { class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+                {{ form_errors(form.prix) }}
+            </div>
+        </div>
+
+        <div class="sm:col-span-3">
+            {{ form_label(form.periodicite, null, { label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, label_html: true }) }}
+            <div class="mt-2">
+                {{ form_widget(form.periodicite, { attr: { class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+                {{ form_errors(form.periodicite) }}
+            </div>
+        </div>
+
+        <div class="col-span-full">
+			{{ form_label(
+                form.acces,
+                null,
+                { 
+                    label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+                    label_html: true 
+                }
+            ) }}
+			<div class="mt-2">
+				{{ form_widget(form.acces, { attr: { rows: 3, class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+				{{ form_errors(form.acces) }}
+			</div>
+		</div>
+
+		<div class="col-span-full">
+			{{ form_label(
+                form.dateExpiration,
+                null,
+                { 
+                    label_attr: { class: 'block text-sm/6 font-medium text-gray-900 dark:text-white' }, 
+                    label_html: true 
+                }
+            ) }}
+			<div class="mt-2">
+				{{ form_widget(form.dateExpiration, { attr: { rows: 3, class: 'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-blue-500' } }) }}
+				{{ form_errors(form.dateExpiration) }}
+			</div>
+		</div>
+	</div>
+
+
+	{# {{ form_row(form.site) }} #}
+	<div class="!mt-6 flex items-center justify-end gap-x-6">
+		<button type="button" 
+                command="close" commandfor="hebergementModal"
+                class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+            Annuler
+        </button>
+		<button type="submit" class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:bg-blue-500 dark:shadow-none dark:focus-visible:outline-blue-500">
+			Modifier
+		</button>
+	</div>
+
+	{{ form_end(form) }}
+{% endblock %}
+</div >
+{% block script %}
+	<script>
+		$(document).ready(function () {
+$('.select2').select2();
+});
+	</script>
+{% endblock %}

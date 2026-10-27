@@ -1,0 +1,42 @@
+{% if developpeurs is not empty %}
+<div class="table-responsive">
+    <table class="table table-striped table-bordered ">
+       <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Téléphone</th>
+            <th style="text-align: center;">Actions</th>       
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for dev in developpeurs %}
+                <tr>
+                    <td>{{ dev.nom }}</td>
+                    <td>{{ dev.prenom }}</td>
+                    <td>{{ dev.email }}</td>
+                    <td>{{ dev.telephone }}</td>
+                    <td style="text-align:center;">
+                        <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon update" title="modifier" data-id="{{ dev.id }}" data-nom="{{ dev.nom }}">
+                            <i class="typcn typcn-edit text-infos"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon delete" title="supprimer" data-id="{{ dev.id }}" data-nom="{{ dev.nom }}">
+                            <i class="mdi mdi-broom text-danger"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon show" title="plus d'informations" data-id="{{ dev.id }}" data-nom="{{ dev.nom }}">
+                            <i class="mdi mdi-eye text-info"></i>
+                        </button>
+   
+                    </td>
+                    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+{% else %}
+    <div class="alert alert-warning">Aucun développeur trouvé avec ce nom .</div>
+{% endif %}
+

@@ -1,0 +1,50 @@
+{# Availability history of the project URL. Needs: checks (newest first), uptime (float|null) #}
+<section class="uptime lg:col-span-2" aria-labelledby="uptime-title">
+    <div class="uptime__head">
+        <h2 id="uptime-title">Disponibilité</h2>
+        {% if uptime is not null %}
+            <span class="uptime__value">{{ uptime|number_format(1, ',', ' ') }} % <small>sur 30 jours</small></span>
+        {% endif %}
+    </div>
+
+    {% if checks is empty %}
+        <div class="empty-state">
+            <strong>Pas encore de mesure</strong>
+            {% if projet.url %}
+                L’historique se remplit à chaque passage de <code>php bin/console app:check-urls</code>.
+            {% else %}
+                Ajoutez une URL à ce projet pour suivre sa disponibilité.
+            {% endif %}
+        </div>
+    {% else %}
+        <ol class="uptime__bars" aria-label="{{ checks|length }} dernières mesures, de la plus ancienne à la plus récente">
+            {% for check in checks|reverse %}
+                <li class="uptime__bar {{ check.success ? 'is-up' : 'is-down' }}"
+                    title="{{ check.checkedAt|date('d/m/Y H:i') }} · {{ check.success ? 'En ligne' : 'Hors ligne' }}{{ check.statusCode ? ' · HTTP ' ~ check.statusCode : '' }}{{ check.responseTimeMs is not null ? ' · ' ~ check.responseTimeMs ~ ' ms' : '' }}">
+                    <span class="sr-only">{{ check.success ? 'En ligne' : 'Hors ligne' }}</span>
+                </li>
+            {% endfor %}
+        </ol>
+
+        {% set last = checks|first %}
+        <p class="uptime__last">
+            Dernière mesure le {{ last.checkedAt|date('d/m/Y à H:i') }} :
+            <span class="pill {{ last.success ? 'pill--ok' : 'pill--bad' }}">{{ last.success ? 'En ligne' : 'Hors ligne' }}</span>
+            {% if last.responseTimeMs is not null %}<span class="mono">{{ last.responseTimeMs }} ms</span>{% endif %}
+            {% if not last.success and last.error %}<span class="uptime__error">{{ last.error }}</span>{% endif %}
+        </p>
+    {% endif %}
+
+    {% if projet.sslExpiresAt %}
+        {% set sslDiff = date().diff(projet.sslExpiresAt) %}
+        {% set sslDays = sslDiff.invert ? -sslDiff.days : sslDiff.days %}
+        <p class="uptime__last mt-3">
+            Certificat SSL : expire le {{ projet.sslExpiresAt|date('d/m/Y') }}
+            {% if sslDays < 0 %}
+                <span class="pill pill--bad">Expiré</span>
+            {% else %}
+                <span class="pill {{ sslDays <= 14 ? 'pill--warn' : 'pill--ok' }}">Dans {{ sslDays }} j</span>
+            {% endif %}
+        </p>
+    {% endif %}
+</section>

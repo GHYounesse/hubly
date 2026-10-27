@@ -1,0 +1,81 @@
+<nav class="sidebar sidebar-offcanvas " id="sidebar">
+	<ul class="nav">
+		<li class="nav-item  ">
+			<p class="sidebar-menu-title">Menu</p>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="{{path('app_dashboard')}}">
+				<i class="typcn typcn-device-desktop menu-icon"></i>
+				<span class="menu-title">Tableau de bord</span>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="{{path('app_societes')}}">
+				<i class="typcn typcn-document-text menu-icon"></i>
+				<span class="menu-title">Sociétés</span>
+			</a>
+		</li>
+		
+		<li class="nav-item">
+			<a class="nav-link " href="{{path('app_hebergement_index')}}">
+				<i class="mdi mdi-cube-outline menu-icon"></i>
+				<span class="menu-title">Hébergements</span>
+			</a>
+		</li>
+		
+    	<li class="nav-item">
+			<a class="nav-link " href="{{path('app_technologie_index')}}">
+				<i class="typcn typcn-cog menu-icon"></i>
+				<span class="menu-title">Technologies</span>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="{{ path('app_projets_timeline') }}">
+				<i class="mdi mdi-chart-timeline menu-icon"></i>
+				<span class="menu-title">Planning</span>
+			</a>
+		</li>
+
+		<li class="nav-item">
+			<a class="nav-link " href="{{path('app_alertes_notifications')}}">
+				<i class="mdi mdi-alarm-multiple menu-icon"></i>
+				<span class="menu-title">Alertes & Notifications</span>
+			</a>
+		</li>
+		{% if is_granted('ROLE_ADMIN') %}
+		<li class="nav-item">
+			<a class="nav-link " href="{{path('app_developpeur_index')}}">
+				<i class="mdi mdi-folder-account menu-icon"></i>
+				<span class="menu-title">Développeurs</span>
+			</a>
+		</li>
+		{% endif %}
+		<li class="nav-item">
+			<a class="nav-link" href="{{ path('app_mon_compte', {id: app.user.id}) }}">
+				<i class="typcn typcn-user-outline menu-icon"></i>
+				<span class="menu-title">Mon compte</span>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link  " href="{{path('app_historique_index')}}">
+				<i class="typcn typcn-pencil menu-icon"></i>
+				<span class="menu-title">Historique de modification
+				</span>
+			</a>
+		</li>
+	</ul>
+	{# <ul class="sidebar-legend">
+		<li>
+			<p class="sidebar-menu-title">Statut projet</p>
+		</li>
+		<li class="nav-item">
+			<a href="#" class="nav-link"># A faire</a>
+		</li>
+		<li class="nav-item">
+			<a href="#" class="nav-link"># En cours</a>
+		</li>
+		<li class="nav-item">
+			<a href="#" class="nav-link"># Terminé</a>
+		</li>
+	</ul> #}
+</nav>

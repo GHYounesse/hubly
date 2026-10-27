@@ -1,0 +1,78 @@
+{% extends 'layout/admin.html.twig' %}
+
+{% block title %}Historique des Modifications{% endblock %}
+
+{% block stylesheets %}
+<!-- Ajoute tes styles CSS ici si nécessaire -->
+{% endblock %}
+
+{% block body %}
+<div class="content-wrapper">
+    {% include 'layout/_page_header.html.twig' with { title: 'Historique', subtitle: 'Qui a modifié quoi, et quand.' } %}
+    <div class="row">
+        <div class="col-lg-12 grid-margin grid-margin-lg-0 stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        
+                    </div>
+                    <div id="global-table-container" class="table-responsive">
+                        {% include 'historique/_search_result.html.twig' with { 'historiques': historiques } %}
+                    </div>
+
+                    <!-- Résultats de la recherche -->
+                    <div id="search-results" style="display: none;"></div>
+
+                    <!-- Spinner de chargement -->
+                    <div id="loading-spinner" class="text-center my-4" style="display: none;"> 
+                        <div class="spinner-border text-info" role="status">
+                            <span class="visually-hidden">Chargement...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        $('#search-form').on('submit', function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            const $searchResultsContainer = $('#search-results');
+            const $globalTableContainer = $('#global-table-container');
+            const $loadingSpinner = $('#loading-spinner');
+
+            // Affiche le spinner et cache les résultats actuels
+            $loadingSpinner.show();
+            $searchResultsContainer.hide();
+            $globalTableContainer.hide();
+
+            $.ajax({
+                url: '{{ path("app_historique_index") }}',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                success: function (html) {
+                    $searchResultsContainer.html(html).show();
+                    $loadingSpinner.hide();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Erreur lors de la recherche:', error);
+                    $loadingSpinner.hide();
+                    $globalTableContainer.show();
+                    $searchResultsContainer.hide();
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

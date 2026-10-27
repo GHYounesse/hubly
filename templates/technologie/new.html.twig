@@ -1,0 +1,121 @@
+
+<div >
+    <!-- Form Header -->
+    <div class="form-band">
+        <h2 class="text-2xl font-bold text-white">
+            Ajouter une technologie
+        </h2>
+        
+    </div>
+	
+
+    {{ form_start(form, {
+        'action': path('app_technologie_new'), 
+        'method': 'POST',
+        'attr': { 'class': 'space-y-6 p-3' }
+    }) }}
+
+    <!-- Form Fields -->
+    <div class="space-y-5">
+        
+        <!-- Nom Field -->
+        <div class="group">
+            {{ form_label(form.nom, null, { 
+                label_attr: { 
+                    class: 'block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2'
+                } 
+            }) }}
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                    </svg>
+                </div>
+                {{ form_widget(form.nom, { 
+                    attr: { 
+                        class: 'block w-full pl-10 pr-3 py-2.5 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:ring-blue-500',
+                        placeholder: 'Ex: React, Vue.js, Laravel...'
+                    } 
+                }) }}
+            </div>
+            <div class="mt-1.5">
+                {{ form_errors(form.nom, {
+                    attr: { class: 'text-sm text-red-600 dark:text-red-400' }
+                }) }}
+            </div>
+        </div>
+
+        <!-- Version Field -->
+        <div class="group">
+            {{ form_label(form.version, null, { 
+                label_attr: { 
+                    class: 'block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2'
+                } 
+            }) }}
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                    </svg>
+                </div>
+                {{ form_widget(form.version, { 
+                    attr: { 
+                        class: 'block w-full pl-10 pr-3 py-2.5 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:ring-blue-500',
+                        placeholder: 'Ex: 18.0, 3.2.1, 9.x...'
+                    } 
+                }) }}
+            </div>
+            <div class="mt-1.5">
+                {{ form_errors(form.version, {
+                    attr: { class: 'text-sm text-red-600 dark:text-red-400' }
+                }) }}
+            </div>
+        </div>
+
+    </div>
+    
+
+    <!-- Logo File Upload Field -->
+    <div class="group">
+        {{ form_label(form.logoFile, null, { 
+            label_attr: { 
+                class: 'block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2'
+            } 
+        }) }}
+        <div>
+            {{ form_widget(form.logoFile, { 
+                attr: { 
+                    'id': 'logoFile',
+                    class: 'block w-full text-gray-900 bg-white border border-gray-300 rounded-lg cursor-pointer focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500'
+                } 
+            }) }}
+        </div>
+        <div class="mt-1.5">
+            {{ form_errors(form.logoFile, {
+                attr: { class: 'text-sm text-red-600 dark:text-red-400' }
+            }) }}
+        </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="flex items-center justify-end gap-3 pt-6 border-t border-gray-200 dark:border-gray-700">
+        <button type="button" 
+                command="close" commandfor="technologieModal"
+                class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+            Annuler
+        </button>
+		
+        <button type="submit" 
+                class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-sm hover:shadow-md transition-all duration-200 dark:bg-blue-500 dark:hover:bg-blue-600">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Ajouter la technologie
+        </button>
+    </div>
+
+    {{ form_end(form) }}
+</div>

@@ -1,0 +1,157 @@
+
+
+
+<div>
+    <!-- Form Header -->
+    <div class="form-band">
+        <h2 class="text-2xl font-bold text-white">
+            Ajouter un développeur
+        </h2>
+    </div>
+
+    {{ form_start(form, {
+        'action': path('app_developpeur_new'),
+        'method': 'POST',
+         'attr': { 'class': 'space-y-6 p-3' , 'novalidate': 'novalidate'  }
+    }) }}
+
+    <!-- Form Fields -->
+    <div class="space-y-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- Nom Field -->
+            <div class="group">
+                {{ form_label(form.nom, null, {
+                    label_attr: { class: 'block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2' }
+                }) }}
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </div>
+                    {{ form_widget(form.nom, {
+                        attr: {
+                            class: 'block w-full pl-10 pr-3 py-2.5 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:ring-blue-500',
+                            placeholder: 'Ex: Dupont'
+                        }
+                    }) }}
+                </div>
+                <div class="mt-1.5">
+                    {{ form_errors(form.nom, { attr: { class: 'text-sm text-red-600 dark:text-red-400' } }) }}
+                </div>
+            </div>
+
+            <!-- Prénom Field -->
+            <div class="group">
+                {{ form_label(form.prenom, null, {
+                    label_attr: { class: 'block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2' }
+                }) }}
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </div>
+                    {{ form_widget(form.prenom, {
+                        attr: {
+                            class: 'block w-full pl-10 pr-3 py-2.5 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:ring-blue-500',
+                            placeholder: 'Ex: Jean'
+                        }
+                    }) }}
+                </div>
+                <div class="mt-1.5">
+                    {{ form_errors(form.prenom, { attr: { class: 'text-sm text-red-600 dark:text-red-400' } }) }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Email Field -->
+        <div class="group">
+            {{ form_label(form.email, null, {
+                label_attr: { class: 'block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2' }
+            }) }}
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H8m0 0l4-4m-4 4l4 4" />
+                    </svg>
+                </div>
+                {{ form_widget(form.email, {
+                    attr: {
+                        class: 'block w-full pl-10 pr-3 py-2.5 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:ring-blue-500',
+                        placeholder: 'Ex: jean.dupont@mail.com'
+                    }
+                }) }}
+            </div>
+            <div class="mt-1.5">
+                {{ form_errors(form.email, { attr: { class: 'text-sm text-red-600 dark:text-red-400' } }) }}
+            </div>
+        </div>
+
+        <!-- Téléphone Field -->
+        <div class="group">
+            {{ form_label(form.telephone, null, {
+                label_attr: { class: 'block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2' }
+            }) }}
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h2l3 7-3 7H3l-1-4 1-6z" />
+                    </svg>
+                </div>
+                {{ form_widget(form.telephone, {
+                    attr: {
+                        class: 'block w-full pl-10 pr-3 py-2.5 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:ring-blue-500',
+                        placeholder: 'Ex: +33 6 12 34 56 78'
+                    }
+                }) }}
+            </div>
+            <div class="mt-1.5">
+                {{ form_errors(form.telephone, { attr: { class: 'text-sm text-red-600 dark:text-red-400' } }) }}
+            </div>
+        </div>
+
+        <!-- User Field (Select2) -->
+        <div class="group">
+            {{ form_label(form.user, 'Utilisateur', {
+                label_attr: { 'class': 'block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2' }
+            }) }}
+            {{ form_widget(form.user, { 'attr': {'class': 'form-select select2 block w-full'} }) }}
+            <div class="mt-1.5">
+                {{ form_errors(form.user, { attr: { 'class': 'text-sm text-red-600 dark:text-red-400' } }) }}
+            </div>
+        </div>
+        
+
+        
+
+    </div>
+
+    <!-- Form Actions -->
+    <div class="flex items-center justify-end gap-3 pt-6 border-t border-gray-200 dark:border-gray-700">
+        <button type="button" 
+                command="close" commandfor="developerModal"
+                class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+            Annuler
+        </button>
+        <button type="submit"
+                class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-sm hover:shadow-md transition-all duration-200 dark:bg-blue-500 dark:hover:bg-blue-600">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Ajouter le développeur
+        </button>
+    </div>
+
+    {{ form_end(form) }}
+</div>
+
+
+{% block script %}
+
+
+
+{% endblock %}

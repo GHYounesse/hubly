@@ -1,0 +1,342 @@
+{% extends 'layout/admin.html.twig' %}
+
+{% block title %}Développeurs {% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+        h2{
+            color:#777977;
+            margin-left:20%;
+        }
+        .modal-content {
+            background-color: #f2f2f2; /* Ou la couleur que tu veux, ex: #dddddd, #fafafa, etc. */
+            color: #333; /* facultatif : couleur du texte */
+        }
+        .modal-header, .modal-body, .modal-footer {
+            background-color: transparent; /* ou un autre si tu veux des parties différentes */
+        }
+        .btn.btn-icon {
+            width: 30px;
+            height: 30px;
+            margin-right: 7px;
+        }
+        .btn.btn-social-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 50px;
+        }
+        
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="content-wrapper">
+    {% include 'layout/_page_header.html.twig' with { title: 'Développeurs', subtitle: 'Les membres de l’équipe technique et leurs coordonnées.' } %}
+    <div class="row">
+        <div class="col-lg-12 grid-margin grid-margin-lg-0 stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            {% include 'search/search.html.twig' with { 'form': form } %}
+                        </div>
+                        <div class="col-md-4 d-flex align-items-center justify-content-end">
+                            <div>
+                                    <!--
+                                <button class="btn btn-sm btn-info new d-inline-flex align-items-center gap-2 px-3 py-2 shadow-sm rounded-2" type="button">
+                                        <i class="bi bi-plus-lg fs-5 d-flex align-items-center"></i>
+                                        <span class="fw-semibold">Nouveau</span>
+                                </button>
+                                -->
+                                <button command="show-modal" commandfor="developerModal" class="btn btn-sm new btn-info  d-inline-flex align-items-center gap-2 px-3 py-2 shadow-sm rounded-2"><i class="bi bi-plus-lg fs-5 d-flex align-items-center"></i>
+                                        <span class="fw-semibold">Nouveau</span>
+                                    </button>
+                            </div>
+                        </div>
+                    </div>
+                            <!-- Tableau Global (Visible par défaut) -->
+                    <div id="global-table-container" class="table-responsive">
+                        {% include 'developpeur/_search_result.html.twig' with { 'developpeurs': developpeurs } %}
+                    </div>
+                            <!-- Résultats de la recherche (Cachés par défaut) -->
+                    <div id="search-results" style="display:none;"></div>
+                        <!-- Spinner de chargement -->
+                    <div id="loading-spinner" class="text-center my-4" style="display: none;"> 
+                            <div class="spinner-border text-info" role="status">
+                                <span class="visually-hidden">Chargement...</span>
+                            </div>
+                    </div>  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal pop_up
+<div class="modal fade" id="developerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+                <h1 class="modal-title text-info w-100 text-center mb-4" id="name" style="display: none;"></h1>                  
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+-->
+<!-- modal de delete  -->
+
+{% include 'developpeur/delete.html.twig'  %}
+
+<!-- modal de show  -->
+<div class="modal" tabindex="-1" id="show" >
+    <div class="modal-dialog modal-lg"> 
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-info w-100 text-center mb-4" id="showModalTitle"></h5>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<el-dialog>
+    <dialog id="developerModal" aria-labelledby="dialog-title" class="fixed inset-0 m-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent p-0 backdrop:bg-transparent">
+        <el-dialog-backdrop class="fixed inset-0 bg-gray-500/75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in dark:bg-gray-900/50"></el-dialog-backdrop>
+
+        <div tabindex="0" class="flex min-h-full items-end justify-center p-4 text-center focus:outline focus:outline-0 sm:items-center sm:p-0">
+            <el-dialog-panel style="padding:0!important" class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-lg sm:p-6 data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95 dark:bg-gray-800 dark:outline dark:outline-1 dark:-outline-offset-1 dark:outline-white/10">
+                <!--
+                <div class="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
+                    <button type="button" command="close" commandfor="dialog" class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-indigo-600 dark:bg-gray-800 dark:hover:text-gray-300 dark:focus:outline-white">
+                        <span class="sr-only">Close</span>
+                        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6">
+                            <path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+                -->
+                <div  id="developerModal-form" class="border border-gray-200 rounded-lg dark:border-gray-700">
+                    
+                </div>
+                
+                    
+               
+            </el-dialog-panel>
+        </div>
+    </dialog>
+</el-dialog>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Gestion du formulaire de recherche AJAX en jQuery
+function initDeveloperSelect2() {
+    const $container = $('#developerModal-form');
+    const $select = $container.find('select.select2');
+
+    if (!$select.length) return;
+
+    // If re-rendering the form, destroy old instance first
+    if ($select.hasClass('select2-hidden-accessible')) {
+      $select.select2('destroy');
+    }
+
+    $select.select2({
+      width: '100%',
+      dropdownParent: $container,
+      placeholder: 'Choisir un utilisateur',
+      allowClear: true
+    });
+  }
+
+$(document).ready(function () {
+    $('#name').hide();
+    $.ajax({
+        type: "GET",
+        url: "/developpeur/new",
+        cache: false,
+        success: function (data) {
+            // Injecter la réponse dans la modal
+            //$('#developerModal .modal-body').html(data);
+            // Afficher la modal
+            //$('#developerModal').modal('show');
+            $('#developerModal-form').html(data);
+            initDeveloperSelect2();
+        },
+        error: function (e) {
+            console.error("Erreur lors du chargement :", e);
+        }
+    });
+
+
+    $('#search-form').on('submit', function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(this);
+        const $searchResultsContainer = $('#search-results');
+        const $globalTableContainer = $('#global-table-container');
+        const $loadingSpinner = $('#loading-spinner');
+
+        // Affiche le spinner et cache le tableau global
+        $loadingSpinner.show();
+        $globalTableContainer.hide();
+
+        $.ajax({
+            url: '{{ path("app_developpeur_index") }}',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function (html) {
+                $searchResultsContainer.html(html).show();
+                $loadingSpinner.hide();
+            },
+            error: function (xhr, status, error) {
+                console.error('Erreur lors de la recherche:', error);
+                $globalTableContainer.show();
+                $searchResultsContainer.hide();
+                $loadingSpinner.hide();
+            }
+        });
+    });
+});
+
+//--------SCRIPT ADD  DEVELOPPEUR---------
+/*
+$(document).on('click', '.new', function () {
+      $('#name').hide();
+    $.ajax({
+        type: "GET",
+        url: "/developpeur/new",
+        cache: false,
+        success: function (data) {
+            // Injecter la réponse dans la modal
+            //$('#developerModal .modal-body').html(data);
+            // Afficher la modal
+            //$('#developerModal').modal('show');
+            $('#developerModal-form').html(data);
+        },
+        error: function (e) {
+            console.error("Erreur lors du chargement :", e);
+        }
+    });
+});
+*/
+ 
+//--------SCRIPT  UPDATE DEVELOPPEUR---------
+$(document).on('click', '.update', function () {
+    let id = $(this).data('id');
+    let nom = $(this).data('nom');
+
+    console.log("ID récupéré :", id); // <-- pour voir si c'est vide
+    console.log("Nom récupéré :", nom);
+
+    if (!id) {
+        console.error("Aucun ID n’a été trouvé dans data-id !");
+        return;
+    }
+    $('#name').text("Modifier : " +nom).show();
+
+    $.ajax({
+        type: "GET",
+        url: "/developpeur/update/" +id ,
+        cache: false,
+        success: function (data) {
+            // Injecter la réponse dans la modal
+            //$('#developerModal .modal-body').html(data);
+            // Afficher la modal
+            $('#developerModal-form').html(data);
+            $('#developerModal').modal('show');
+        },
+        error: function (e) {
+            console.error("Erreur lors du chargement :", e);
+        }
+    });
+});
+
+//--------SCRIPT DELETE  DEVELOPPEUR---------
+$(document).on('click', '.delete', function () {
+    let id = $(this).data('id');
+    let nom = $(this).data('nom');
+
+    console.log("ID récupéré :", id); // <-- pour voir si c'est vide
+    console.log("Nom récupéré :", nom);
+
+    if (!id) {
+        console.error("Aucun ID n’a été trouvé dans data-id !");
+        return;
+    }
+    $('#deletemodal').text("Voulez-vous supprimer " + nom + " ? ");
+        $("#id_developpeur").val(id);
+    $('#delete-form').attr('action', '/developpeur/delete/' + id);
+    $('#developpeurModalDelete').modal('show');
+
+    $.ajax({
+        type: "GET",
+        url: "/developpeur/delete/"+id,
+        cache: false,
+        success: function (data) {
+            // Injecter la réponse dans la modal
+            $('#developpeurModalDelete .modal-body').html(data);
+            // Afficher la modal
+            $('#developpeurModalDelete').modal('show');
+        },
+        error: function (e) {
+            console.error("Erreur lors du chargement :", e);
+        }
+    });
+});
+
+//----------------SCRIPT SHOW DEVELOPPEUR-------------------
+$(document).on('click', '.show', function () {
+    let id = $(this).data('id');
+    let nom = $(this).data('nom');
+    console.log("ID récupéré :", id); // <-- pour voir si c'est vide
+    console.log("Nom récupéré :", nom);
+
+    if (!id) {
+        console.error("Aucun ID n’a été trouvé dans data-id !");
+        return;
+    }
+
+    $('#showModalTitle').text(nom);
+
+    $.ajax({
+        type: "GET",
+        url: "/developpeur/show/"+id,
+        cache: false,
+        success: function (data) {
+            // Injecter la réponse dans la modal
+            $('#show .modal-body').html(data);
+            // Afficher la modal
+            $('#show').modal('show');
+        },
+        error: function (e) {
+            console.error("Erreur lors du chargement :", e);
+        }
+    });
+});
+$('#developerModal').on('shown.bs.modal', function () {
+  $(this).find('.select2').select2({
+    width: '100%',
+    dropdownParent: $('#developerModal'),
+    placeholder: 'Choisir un utilisateur',
+    allowClear: true
+  });
+});
+</script>
+{% endblock %}

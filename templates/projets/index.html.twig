@@ -1,0 +1,245 @@
+{% extends 'layout/admin.html.twig' %}
+
+{% block title %}Projets - {{appName}}{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+        h2{
+            color:#777977;
+            margin-left:20%;
+        }
+        .modal-content {
+            background-color: #f2f2f2; /* Ou la couleur que tu veux, ex: #dddddd, #fafafa, etc. */
+            color: #333; /* facultatif : couleur du texte */
+        }
+        .modal-header, .modal-body, .modal-footer {
+            background-color: transparent; /* ou un autre si tu veux des parties différentes */
+        }
+        .btn.btn-icon {
+            width: 30px;
+            height: 30px;
+            margin-right: 7px;
+        }
+        .btn.btn-social-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 50px;
+        }
+        
+    </style>
+{% endblock %}
+
+{% block body %}
+{% set societe_id = projets|first ? projets|first.societe.id : null %}
+<div class="content-wrapper">
+    {% include 'layout/_page_header.html.twig' with { title: 'Projets', subtitle: 'Suivez l’avancement, les responsables et les livraisons.', secondary: [{ label: 'Planning', href: path('app_projets_timeline') }, { label: 'Exporter en CSV', href: path('app_export_projets') }] } %}
+    
+			
+			
+    <div class="row mb-3">
+        
+
+        <div class="col-lg-12 grid-margin grid-margin-lg-0 stretch-card">
+            
+            <div class="card">
+                <div class="form-band">
+                    <div class="flex items-center gap-3 py-3">
+                        <a href="{{ path('app_societes') }}"
+                        class="text-white hover:text-blue-400 transition duration-200"
+                        title="Retour">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="w-8 h-8"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2.5"
+                                    d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </a>
+
+                        <h2 class="capitalize text-white text-4xl font-bold m-0">
+                            Projets - {{ societe_denomination }}
+                        </h2>
+                    </div>
+                </div>   
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-12 d-flex align-items-center justify-content-between mb-3">
+                            <div>
+                                <a href="{{ path('app_projets_new', { 'societe': societe_id }) }}" class="btn btn-sm btn-info new d-inline-flex align-items-center gap-2 px-3 py-2 shadow-sm rounded-2" type="button">
+                                    <i class="bi bi-plus-lg fs-5 d-flex align-items-center"></i>
+                                    <span class="fw-semibold">Nouveau</span>
+                                </a>
+                            </div>
+                        </div>
+                        {# --- Progress bar container --- #}
+                        <div id="exportProgress" class="!mx-4 mb-2 progress mt-2 w-full" style="height: 25px; display:none;">
+                            <div id="exportProgressBar" style="height: 25px;" class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                                role="progressbar" style="width: 0%;">0%</div>
+                        </div>
+                        
+                        <div class="col-12">
+                            {% if form is defined %}
+                                {% include 'search/projet-filters.html.twig' with { 'form': form } %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- Tableau Global (Visible par défaut) -->
+                    <div id="global-table-container" class="table-responsive">
+                        {% include 'projets/_search_result.html.twig' with { 'projets': projets } %}
+                    </div>
+
+                    <!-- Résultats de la recherche (Cachés par défaut) -->
+                    <div id="search-results" style="display: none;"></div>
+
+                    <!-- Spinner de chargement -->
+                    <div id="loading-spinner" class="text-center my-4" style="display: none;"> 
+                        <div class="spinner-border text-info" role="status">
+                        </div>
+                    </div>  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-6">
+    {{ knp_pagination_render(projets, 'pagination/tailwind_pagination.html.twig') }}
+</div>
+
+<el-dialog>
+    <dialog id="dialog" aria-labelledby="dialog-title" class="fixed inset-0 m-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent p-0 backdrop:bg-transparent">
+        <el-dialog-backdrop class="fixed inset-0 bg-gray-500/75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in dark:bg-gray-900/50"></el-dialog-backdrop>
+
+        <div tabindex="0" class="flex min-h-full items-end justify-center p-4 text-center focus:outline focus:outline-0 sm:items-center sm:p-0">
+            <el-dialog-panel class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-lg sm:p-6 data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95 dark:bg-gray-800 dark:outline dark:outline-1 dark:-outline-offset-1 dark:outline-white/10">
+                <div class="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
+                    <button type="button" command="close" commandfor="dialog" class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-indigo-600 dark:bg-gray-800 dark:hover:text-gray-300 dark:focus:outline-white">
+                        <span class="sr-only">Close</span>
+                        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6">
+                            <path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="sm:flex sm:items-start">
+                    <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:size-10 dark:bg-red-500/10">
+                        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6 text-red-600 dark:text-red-400">
+                            <path d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="!mt-3 !text-center sm:!ml-4 sm:!mt-0 sm:!text-left">
+                        <h3 id="dialog-title" class="text-base !text-left !font-semibold !text-gray-900 dark:text-white">
+                            Supprimer le projet
+                            <span id="modalSocieteName" class="font-semibold text-gray-900 dark:text-white"></span>
+                            ?
+                        </h3>
+                        <div class="mt-2">
+                            <p class="!text-sm !text-left !text-gray-500 dark:text-gray-400">Cette action est
+                                <span class="font-semibold text-red-600 dark:text-red-400">définitive</span>
+                                et entraînera la perte de tous les projets associés.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="!mt-5 sm:!mt-4 sm:flex sm:!flex-row-reverse">
+                    <button id="confirm-delete" type="button" command="close" commandfor="dialog" class="inline-flex w-full justify-center rounded-md !bg-red-600 !px-3 !py-2 !text-sm !font-semibold !text-white !shadow-sm hover:!bg-red-500 sm:!ml-3 sm:!w-auto dark:bg-red-500 dark:shadow-none dark:hover:bg-red-400">Supprimer</button>
+                    <button id="cancel-delete" type="button" command="close" commandfor="dialog" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm !ring-1 !ring-inset !ring-gray-300 hover:bg-gray-50 sm:!mt-0 sm:w-auto dark:bg-white/10 dark:text-white dark:shadow-none dark:ring-white/5 dark:hover:bg-white/20">Cancel</button>
+                </div>
+            </el-dialog-panel>
+        </div>
+    </dialog>
+</el-dialog>
+
+<!--  delete modal  -->
+{% include 'projets/delete.html.twig' %}
+
+<!-- modal de show  -->
+<div class="modal" tabindex="-1" id="show" >
+    <div class="modal-dialog modal-lg"> {# Exemple avec modal-lg #}
+        <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title text-info w-100 text-center mb-4" id="showModalTitle"></h3>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-info" data-dismiss="modal">Fermer</button>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    //----------SCRIPT POUR NEW PROJECT-------- 
+
+    // Gestion du formulaire de recherche AJAX en jQuery
+    $(document).ready(function () {
+        $('#search-form').on('submit', function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            const $searchResultsContainer = $('#search-results');
+            const $globalTableContainer = $('#global-table-container');
+            const $loadingSpinner = $('#loading-spinner');
+
+            // Affiche le spinner et cache le tableau global
+            $loadingSpinner.show();
+            $globalTableContainer.hide();
+
+            $.ajax({
+                url: "{{ path('app_societe_projets_search', { id: societe_id }) }}",
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                success: function (html) {
+                    $searchResultsContainer.html(html).show();
+                    $loadingSpinner.hide();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Erreur lors de la recherche:', error);
+                    $globalTableContainer.show();
+                    $searchResultsContainer.hide();
+                    $loadingSpinner.hide();
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
+
+{% block javascripts %}
+	<script>
+	document.addEventListener("DOMContentLoaded", () => {
+		const modal = document.getElementById("dialog");
+		const cancelBtn = document.getElementById("cancel-delete");
+		const confirmBtn = document.getElementById("confirm-delete");
+		let currentForm = null;
+
+		document.querySelectorAll(".delete-btn").forEach(button => {
+			button.addEventListener("click", () => {
+				const name = button.dataset.name;
+				currentForm = button.closest("form");
+				modal.showModal();
+			});
+		});
+
+		cancelBtn.addEventListener("click", () => {
+			currentForm = null;
+			modal.close();
+		});
+
+		confirmBtn.addEventListener("click", () => {
+			if (currentForm) currentForm.submit();
+		});
+	});
+</script>
+{% endblock %}

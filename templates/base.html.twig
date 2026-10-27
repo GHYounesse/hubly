@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}{{appName}}{% endblock %}</title>
+        {% include 'layout/_theme_init.html.twig' %}
+        <link rel="icon" type="image/svg+xml" href="{{ asset('images/favicon.svg') }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicon-32.png') }}">
+        <link rel="apple-touch-icon" href="{{ asset('images/apple-touch-icon.png') }}">
+        
+        <link rel="stylesheet" href="{{ asset('template/vendors/typicons.font/font/typicons.css') }}">
+        <link rel="stylesheet" href="{{ asset('template/vendors/css/vendor.bundle.base.css') }}">
+        <link rel="stylesheet" href="{{ asset('template/css/vertical-layout-light/style.css') }}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap">
+        <link rel="stylesheet" href="{{ asset('styles/theme.css') }}">
+        <link rel="stylesheet" href="{{ asset('styles/ui.css') }}">
+
+        {% block stylesheets %}{% endblock %}
+
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+
+        <script src="{{ asset('template/vendors/js/vendor.bundle.base.js') }}"></script>
+        <script src="{{ asset('template/js/off-canvas.js') }}"></script>
+        <script src="{{ asset('template/js/hoverable-collapse.js') }}"></script>
+        <script src="{{ asset('template/js/template.js') }}"></script>
+        <script src="{{ asset('template/js/settings.js') }}"></script>
+        <script src="{{ asset('template/js/todolist.js') }}"></script>
+        <script src="{{ asset('template/vendors/progressbar.js/progressbar.min.js') }}"></script>
+        <script src="{{ asset('template/vendors/chart.js/Chart.min.js') }}"></script>
+        <script src="{{ asset('template/js/dashboard.js') }}"></script>
+
+        {% block scripts %}{% endblock %}
+    </body>
+</html>

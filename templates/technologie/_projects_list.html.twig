@@ -1,0 +1,15 @@
+<div class="flex flex-wrap gap-2">
+    {% if projets is not empty %}
+        {% for projet in projets %}
+            <a href="/projets/show/{{ projet.id }}"
+               class="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-700
+                      hover:bg-blue-200 transition">
+                {{ projet.nom }}
+            </a>
+        {% endfor %}
+    {% else %}
+        <p class="italic text-gray-400">
+            Aucun projet trouvé.
+        </p>
+    {% endif %}
+</div>

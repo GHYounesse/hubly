@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vérification - {{ appName }}{% endblock %}
+
+{% block stylesheets %}
+<style>
+  .otp-input:focus { border-color: var(--color-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 25%, transparent); outline: none; }
+  .otp-input.filled { border-color: var(--color-primary); background: var(--color-primary-subtle); }
+  .otp-row { display: flex; justify-content: space-between; gap: .5rem; margin-bottom: 1.5rem; }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="auth-shell">
+    <aside class="auth-aside">
+        <span class="hubly-brand"><img src="{{ asset('images/hubly-mark.svg') }}" alt="" width="40" height="44"><span>{{ appName }}</span></span>
+        <div>
+            <h2>Une dernière étape avant d’entrer.</h2>
+            <ul>
+                <li>Le code est envoyé à votre adresse e-mail</li>
+                <li>Il reste valable 5 minutes</li>
+                <li>Il protège vos accès même si votre mot de passe fuite</li>
+            </ul>
+        </div>
+        <small>Espace réservé à l’équipe.</small>
+    </aside>
+
+    <main class="auth-main">
+        <div class="auth-card">
+            <span class="hubly-brand"><img src="{{ asset('images/hubly-mark.svg') }}" alt="" width="34" height="38"><span>{{ appName }}</span></span>
+            <h1>Saisissez votre code</h1>
+            <p class="lead-sm">Nous venons d’envoyer un code à 6 chiffres à votre adresse e-mail. Il expire dans 5 minutes.</p>
+
+            {% if error %}
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+            {% endif %}
+
+            {% for msg in app.flashes('success') %}
+                <div class="alert alert-success" role="status">{{ msg }}</div>
+            {% endfor %}
+
+            <form method="post" action="{{ path('app_2fa_verify') }}" id="otpForm">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('2fa_verify') }}">
+
+                <div class="otp-row" id="otpInputs" role="group" aria-label="Code de vérification à 6 chiffres">
+                    {% for i in 1..6 %}
+                        <input
+                            type="text"
+                            name="digit[]"
+                            class="otp-input"
+                            maxlength="1"
+                            inputmode="numeric"
+                            pattern="[0-9]"
+                            aria-label="Chiffre {{ i }}"
+                            autocomplete="{% if i == 1 %}one-time-code{% else %}off{% endif %}"
+                            {% if i == 1 %}autofocus{% endif %}
+                        >
+                    {% endfor %}
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Vérifier le code</button>
+            </form>
+
+            <form method="post" action="{{ path('app_2fa_resend') }}" class="mt-4">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('2fa_resend') }}">
+                <span class="text-muted">Code non reçu ?</span>
+                <button type="submit" class="btn btn-link p-0 ml-1" style="min-height:0">Renvoyer le code</button>
+            </form>
+
+            <p class="mt-3 mb-0"><a href="{{ path('app_logout') }}">Se déconnecter</a></p>
+        </div>
+    </main>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const inputs = [...document.querySelectorAll('.otp-input')];
+
+  inputs.forEach((input, idx) => {
+    input.addEventListener('input', (e) => {
+      const val = e.target.value.replace(/\D/g, '');
+      e.target.value = val.slice(-1);
+      e.target.classList.toggle('filled', val !== '');
+
+      if (val && idx < inputs.length - 1) {
+        inputs[idx + 1].focus();
+      }
+
+      if (inputs.every(i => i.value)) {
+        document.getElementById('otpForm').submit();
+      }
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !input.value && idx > 0) {
+        inputs[idx - 1].focus();
+        inputs[idx - 1].value = '';
+        inputs[idx - 1].classList.remove('filled');
+      }
+    });
+
+    input.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+      pasted.split('').forEach((char, i) => {
+        if (inputs[i]) {
+          inputs[i].value = char;
+          inputs[i].classList.add('filled');
+        }
+      });
+      inputs[Math.min(pasted.length, inputs.length - 1)].focus();
+      if (pasted.length === 6) document.getElementById('otpForm').submit();
+    });
+  });
+});
+</script>
+{% endblock %}

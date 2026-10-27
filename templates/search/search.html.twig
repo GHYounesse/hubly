@@ -1,0 +1,10 @@
+<div class="search-container">
+    {{ form_start(form, {'attr': {'id': 'search-form', 'class': 'd-flex'}}) }}
+        <div class="flex-grow-1 me-2"  >
+            {{ form_widget(form.search, {'attr': {'placeholder': 'Rechercher ', 'class': 'form-control'}}) }}
+        </div>
+        <button type="submit" class="btn btn-sm btn-info btn-rounded" title="chercher">
+            <i class="bi bi-search"></i> 
+        </button>
+    {{ form_end(form) }}
+</div>
