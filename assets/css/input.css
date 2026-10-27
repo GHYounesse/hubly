@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+label.required:after {
+    content: "*";       /* adds the asterisk */
+    color: red;         /* make it red */
+    margin-right: 4px;  /* spacing before label text */
+}
