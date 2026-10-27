@@ -1,0 +1,23 @@
+# see https://symfony.com/doc/current/reference/configuration/framework.html
+framework:
+    secret: '%env(APP_SECRET)%'
+    error_controller: 'App\Controller\Error\ErrorController::show'
+    csrf_protection: ~
+    # Note that the session will be started ONLY if you read or write from it.
+    session: true
+
+    rate_limiter:
+        # Every /api request, per user (or per IP when anonymous). See ApiRateLimitSubscriber.
+        api:
+            policy: 'sliding_window'
+            limit: 120
+            interval: '1 minute'
+
+    #esi: true
+    #fragments: true
+
+when@test:
+    framework:
+        test: true
+        session:
+            storage_factory_id: session.storage.factory.mock_file

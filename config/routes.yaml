@@ -1,0 +1,11 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+# POST /api/login is handled by the json_login authenticator of the "api_login" firewall (security.yaml).
+# The route must exist for the firewall to match it; no controller is needed.
+api_login:
+    path: /api/login
+    methods: [POST]

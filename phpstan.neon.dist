@@ -1,0 +1,8 @@
+parameters:
+    level: 5
+    paths:
+        - src
+        - tests
+    excludePaths:
+        - src/Kernel.php
+    # Raise the level progressively (6, 7...) as the code base gets cleaner.

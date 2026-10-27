@@ -1,0 +1,117 @@
+# config/services.yaml
+
+parameters:
+    notifications: []
+    logos_directory: '%kernel.project_dir%/public/uploads/logos'
+    app.name: 'Hubly'
+    # 32 random bytes in base64: php bin/console app:encryption:generate-key
+    app.encryption_key: '%env(APP_ENCRYPTION_KEY)%'
+    slack_dsn_default: 'null://null'
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $mailFrom: '%env(MAIL_FROM)%'
+            $alertRecipient: '%env(ALERT_RECIPIENT)%'
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    App\Service\Notification\NotificationService:
+        arguments:
+            $mailer: '@mailer.mailer'
+            $entityManager: '@doctrine.orm.entity_manager'
+
+    App\Service\Security\TwoFactorCodeService:
+        arguments:
+            $appName: '%app.name%'
+ 
+
+    # ---- REST API filters (referenced from config/api_platform/*.yaml)
+
+    project.search_filter:
+        parent: 'api_platform.doctrine.orm.search_filter'
+        arguments: [{ nom: 'partial', status: 'exact', priorite: 'exact', societe: 'exact' }]
+        tags: ['api_platform.filter']
+        autowire: false
+        autoconfigure: false
+        public: false
+
+    project.order_filter:
+        parent: 'api_platform.doctrine.orm.order_filter'
+        arguments: [{ nom: ~, dateLivraison: ~, status: ~ }]
+        tags: ['api_platform.filter']
+        autowire: false
+        autoconfigure: false
+        public: false
+
+    project.date_filter:
+        parent: 'api_platform.doctrine.orm.date_filter'
+        arguments: [{ dateLivraison: ~ }]
+        tags: ['api_platform.filter']
+        autowire: false
+        autoconfigure: false
+        public: false
+
+    company.search_filter:
+        parent: 'api_platform.doctrine.orm.search_filter'
+        arguments: [{ denomination: 'partial', statut: 'exact' }]
+        tags: ['api_platform.filter']
+        autowire: false
+        autoconfigure: false
+        public: false
+
+    company.order_filter:
+        parent: 'api_platform.doctrine.orm.order_filter'
+        arguments: [{ denomination: ~ }]
+        tags: ['api_platform.filter']
+        autowire: false
+        autoconfigure: false
+        public: false
+
+    hosting.search_filter:
+        parent: 'api_platform.doctrine.orm.search_filter'
+        arguments: [{ site: 'partial', fournisseur: 'partial', type: 'exact' }]
+        tags: ['api_platform.filter']
+        autowire: false
+        autoconfigure: false
+        public: false
+
+    hosting.order_filter:
+        parent: 'api_platform.doctrine.orm.order_filter'
+        arguments: [{ site: ~, dateExpiration: ~ }]
+        tags: ['api_platform.filter']
+        autowire: false
+        autoconfigure: false
+        public: false
+
+    hosting.date_filter:
+        parent: 'api_platform.doctrine.orm.date_filter'
+        arguments: [{ dateExpiration: ~ }]
+        tags: ['api_platform.filter']
+        autowire: false
+        autoconfigure: false
+        public: false
+
+    hosting.boolean_filter:
+        parent: 'api_platform.doctrine.orm.boolean_filter'
+        arguments: [{ estActif: ~ }]
+        tags: ['api_platform.filter']
+        autowire: false
+        autoconfigure: false
+        public: false
+
+
+twig:
+    globals:
+        notifications: '@App\Service\Monitoring\HebergementExpirationService'
+

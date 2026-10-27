@@ -1,0 +1,39 @@
+api_platform:
+    title: Hubly API
+    version: 1.0.0
+    description: |
+        REST API of Hubly: projects, companies and hosting plans.
+
+        1. `POST /api/login` with `{"email": "...", "password": "..."}` returns a JWT.
+        2. Send it on every other request: `Authorization: Bearer <token>`.
+
+        Reading needs `ROLE_USER`, writing needs `ROLE_ADMIN`. Requests are rate limited
+        (see the `X-RateLimit-*` response headers).
+    formats:
+        jsonld:
+            mime_types: ['application/ld+json']
+        json:
+            mime_types: ['application/json']
+    # patch_formats (application/merge-patch+json) keeps the bundle default
+    docs_formats:
+        jsonld:
+            mime_types: ['application/ld+json']
+        jsonopenapi:
+            mime_types: ['application/vnd.openapi+json']
+        html:
+            mime_types: ['text/html']
+    defaults:
+        stateless: true
+        cache_headers:
+            vary: ['Content-Type', 'Authorization', 'Origin']
+        pagination_items_per_page: 20
+        pagination_maximum_items_per_page: 100
+        pagination_client_items_per_page: true
+    swagger:
+        # Adds the "Authorize" button in /api/docs: paste "Bearer <token>"
+        api_keys:
+            JWT:
+                name: Authorization
+                type: header
+    mapping:
+        paths: ['%kernel.project_dir%/config/api_platform']
