@@ -1,0 +1,51 @@
+###> symfony/framework-bundle ###
+/.env
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/*/*.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+###> symfony/asset-mapper ###
+/public/assets/
+/public/css/*.css
+/public/uploads
+/assets/vendor/
+###< symfony/asset-mapper ###
+
+###> npm ###
+/node_modules
+###< npm ###
+
+###> OS / editors ###
+.DS_Store
+Thumbs.db
+Desktop.ini
+/.idea/
+/.vscode/
+*.swp
+*~
+###< OS / editors ###
+
+###> misc ###
+*.log
+sonar-project.properties
+coverage.xml
+###< misc ###
+
+###> friendsofphp/php-cs-fixer ###
+/.php-cs-fixer.php
+/.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###
