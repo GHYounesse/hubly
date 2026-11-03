@@ -7,7 +7,7 @@
         "php": ">=8.2",
         "api-platform/doctrine-orm": "^4.4",
         "api-platform/symfony": "^4.1",
-        "doctrine/dbal": "^3.10.3",
+        "doctrine/dbal": "^4.5.0",
         "doctrine/doctrine-bundle": "^2.18",
         "doctrine/doctrine-migrations-bundle": "^3.5",
         "doctrine/orm": "^3.5.3",
